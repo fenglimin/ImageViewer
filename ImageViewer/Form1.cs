@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Collections;
+using System.Configuration;
 using System.IO;
 
 
@@ -22,7 +23,7 @@ namespace ImageViewer
         private int _imageIndexDetail = 0;
         private bool _formLoading = true;
         private int _maxPicturesPerScreen = 12;
-        private bool _orderByFileName = true;
+        private bool _orderByFileName;
 
         public Form1()
         {
@@ -51,10 +52,15 @@ namespace ImageViewer
                 _pictureList[index].Click += new EventHandler(OnImageClicked);
             }
 
-            tbDir.Text = (@"D:\Temp\Image");
-
             _formLoading = false;
             AdjustSize(true);
+
+            var config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
+            tbDir.Text = config.AppSettings.Settings["ImageDir"].Value;
+            _orderByFileName = config.AppSettings.Settings["OrderByName"].Value == "1";
+            rbOrderByName.Checked = _orderByFileName;
+            rbOrderByTime.Checked = !_orderByFileName;
+            ShowImage(tbDir.Text);
         }
 
         private void Form1_SizeChanged(object sender, EventArgs e)
@@ -198,7 +204,7 @@ namespace ImageViewer
                 pictureBoxDetail.Visible = true;
                 gbControl.Enabled = false;
                 gbAction.Enabled = false;
-                
+
                 for (var i = 0; i < _row*_column; i++)
                 {
                     if (_fileList[_imageIndex+i].FullName == pictureBox.ImageLocation)
@@ -212,6 +218,9 @@ namespace ImageViewer
 
         private void ShowImage(string imageDir)
         {
+            if (!Directory.Exists(imageDir))
+                return;
+
             DirectoryInfo root = new DirectoryInfo(imageDir);
             _fileList = root.GetFiles();
 
@@ -454,14 +463,22 @@ namespace ImageViewer
 
         private void rbOrderByName_CheckedChanged(object sender, EventArgs e)
         {
-            _orderByFileName = true;
+            _orderByFileName = rbOrderByName.Checked;
             ShowImage(tbDir.Text);
         }
 
         private void rbOrderByTime_CheckedChanged(object sender, EventArgs e)
         {
-            _orderByFileName = false;
+            _orderByFileName = rbOrderByName.Checked;
             ShowImage(tbDir.Text);
+        }
+
+        private void Form1_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            var config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
+            config.AppSettings.Settings["ImageDir"].Value = tbDir.Text;
+            config.AppSettings.Settings["OrderByName"].Value = rbOrderByName.Checked? "1" : "0";
+            config.Save(ConfigurationSaveMode.Minimal);
         }
 
         private void pictureBoxDetail_Click(object sender, EventArgs e)
@@ -474,6 +491,7 @@ namespace ImageViewer
             if (mouseE.Button == System.Windows.Forms.MouseButtons.Right)
             {
                 pictureBox.Visible = false;
+                pictureBox.ImageLocation = string.Empty;
                 gbAction.Enabled = true;
                 gbControl.Enabled = true;
             }
