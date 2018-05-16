@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,8 +17,9 @@ namespace ImageViewer
 {
     public partial class Form1 : Form
     {
-        private int _row = 2, _column = 3;
+        private int _row = 0, _column = 0;
         private PictureBox[]  _pictureList = new PictureBox[12];
+        private RadioButton[] _layoutList = new RadioButton[12];
         private FileInfo[] _fileList;
         private int _imageIndex = 0;
         private int _imageIndexDetail = 0;
@@ -45,6 +47,20 @@ namespace ImageViewer
             _pictureList[10] = pictureBox11;
             _pictureList[11] = pictureBox12;
 
+            _layoutList[0] = rb1x1;
+            _layoutList[1] = rb1x2;
+            _layoutList[2] = rb1x3;
+            _layoutList[3] = rb1x4;
+            _layoutList[4] = rb2x1;
+            _layoutList[5] = rb2x2;
+            _layoutList[6] = rb2x3;
+            _layoutList[7] = rb2x4;
+            _layoutList[8] = rb3x1;
+            _layoutList[9] = rb3x2;
+            _layoutList[10] = rb3x3;
+            _layoutList[11] = rb3x4;
+
+
             for (var index = 0; index < _maxPicturesPerScreen; index++)
             {
                 _pictureList[index].MouseWheel += new MouseEventHandler(OnMouseWheel);
@@ -52,15 +68,28 @@ namespace ImageViewer
                 _pictureList[index].Click += new EventHandler(OnImageClicked);
             }
 
-            _formLoading = false;
-            AdjustSize(true);
+            
+            
 
             var config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
             tbDir.Text = config.AppSettings.Settings["ImageDir"].Value;
             _orderByFileName = config.AppSettings.Settings["OrderByName"].Value == "1";
+            _imageIndex = int.Parse(config.AppSettings.Settings["ImageIndex"].Value);
+            _row = int.Parse(config.AppSettings.Settings["Row"].Value);
+            _column = int.Parse(config.AppSettings.Settings["Column"].Value);
+            var selectedFiles = config.AppSettings.Settings["SelectedFiles"].Value;
+            object[] fileList = selectedFiles.Split(new char[]{';'}, StringSplitOptions.RemoveEmptyEntries);
+            lbSelectedFile.Items.AddRange(fileList);
+            
             rbOrderByName.Checked = _orderByFileName;
             rbOrderByTime.Checked = !_orderByFileName;
-            ShowImage(tbDir.Text);
+            _layoutList[(_row-1)*4 + _column - 1].Checked = true;
+
+
+            AdjustSize(true);
+            ShowImage(tbDir.Text, _imageIndex);
+
+            _formLoading = false;
         }
 
         private void Form1_SizeChanged(object sender, EventArgs e)
@@ -90,7 +119,7 @@ namespace ImageViewer
                 return;
 
             tbDir.Text = dialog.SelectedPath;
-            ShowImage(tbDir.Text);
+            ShowImage(tbDir.Text, 0);
         }
 
         private void gbControl_Enter(object sender, EventArgs e)
@@ -105,11 +134,16 @@ namespace ImageViewer
             if (dialog.ShowDialog() != DialogResult.OK)
                 return;
 
-            foreach(var file in lbSelectedFile.Items)
+
+            var selectedFiles = new object[lbSelectedFile.Items.Count];
+            lbSelectedFile.Items.CopyTo(selectedFiles, 0);
+
+            foreach (var file in selectedFiles)
             {
                 var fileInfo = new FileInfo(file as string);
 
-                File.Copy(fileInfo.FullName, Path.Combine(dialog.SelectedPath, fileInfo.Name));
+                File.Copy(fileInfo.FullName, Path.Combine(dialog.SelectedPath, fileInfo.Name), true);
+                lbSelectedFile.Items.Remove(file);
             }
         }
 
@@ -216,7 +250,7 @@ namespace ImageViewer
             }
         }
 
-        private void ShowImage(string imageDir)
+        private void ShowImage(string imageDir, int currentIndex)
         {
             if (!Directory.Exists(imageDir))
                 return;
@@ -227,7 +261,7 @@ namespace ImageViewer
             if (!_orderByFileName)
                 _fileList = _fileList.OrderBy(x => x.LastWriteTime).ToArray();
 
-            _imageIndex = -_row * _column;
+            _imageIndex = currentIndex - _row * _column;
 
             ShowNextImageOnScreen();
             UpdateTrackBar();
@@ -290,6 +324,7 @@ namespace ImageViewer
                 return;
 
             _imageIndex += _row * _column;
+            UpdateTrackBar();
             ShowOneScreen();
         }
 
@@ -463,14 +498,11 @@ namespace ImageViewer
 
         private void rbOrderByName_CheckedChanged(object sender, EventArgs e)
         {
-            _orderByFileName = rbOrderByName.Checked;
-            ShowImage(tbDir.Text);
-        }
-
-        private void rbOrderByTime_CheckedChanged(object sender, EventArgs e)
-        {
-            _orderByFileName = rbOrderByName.Checked;
-            ShowImage(tbDir.Text);
+            if (!_formLoading)
+            {
+                _orderByFileName = rbOrderByName.Checked;
+                ShowImage(tbDir.Text, 0);
+            }
         }
 
         private void Form1_FormClosed(object sender, FormClosedEventArgs e)
@@ -478,6 +510,12 @@ namespace ImageViewer
             var config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
             config.AppSettings.Settings["ImageDir"].Value = tbDir.Text;
             config.AppSettings.Settings["OrderByName"].Value = rbOrderByName.Checked? "1" : "0";
+            config.AppSettings.Settings["ImageIndex"].Value = _imageIndex.ToString(CultureInfo.InvariantCulture);
+            config.AppSettings.Settings["Row"].Value = _row.ToString(CultureInfo.InvariantCulture);
+            config.AppSettings.Settings["Column"].Value = _column.ToString(CultureInfo.InvariantCulture);
+
+            var selectedFiles = lbSelectedFile.Items.Cast<object>().Aggregate(string.Empty, (current, item) => current + (item + ";"));
+            config.AppSettings.Settings["SelectedFiles"].Value = selectedFiles;
             config.Save(ConfigurationSaveMode.Minimal);
         }
 
