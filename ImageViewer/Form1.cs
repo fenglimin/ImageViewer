@@ -22,6 +22,7 @@ namespace ImageViewer
         private int _imageIndexDetail = 0;
         private bool _formLoading = true;
         private int _maxPicturesPerScreen = 12;
+        private bool _orderByFileName = true;
 
         public Form1()
         {
@@ -144,7 +145,7 @@ namespace ImageViewer
                         if (_pictureList[index].ImageLocation != _fileList[_imageIndex + index].FullName)
                         {
                             _pictureList[index].ImageLocation = _fileList[_imageIndex + index].FullName;
-                            toolTip1.SetToolTip(_pictureList[index], _pictureList[index].ImageLocation);
+                            SetImageTipInfo(_pictureList[index]);
                             SetSelectState(_pictureList[index]);
                         }
                     }
@@ -155,12 +156,17 @@ namespace ImageViewer
             {
                 _pictureList[index].Visible = false;
                 _pictureList[index].ImageLocation = string.Empty;
-                toolTip1.SetToolTip(_pictureList[index], _pictureList[index].ImageLocation);
+                SetImageTipInfo(_pictureList[index]);
             }
 
             SetShowStatus();
             UpdateTrackBar();
 
+        }
+
+        private void SetImageTipInfo(PictureBox pictureBox)
+        {
+            toolTip1.SetToolTip(pictureBox, pictureBox.ImageLocation); ;
         }
 
         private void OnImageClicked(object sender, EventArgs e)
@@ -206,7 +212,9 @@ namespace ImageViewer
             DirectoryInfo root = new DirectoryInfo(imageDir);
             _fileList = root.GetFiles();
 
-            _fileList = _fileList.OrderBy(x => x.LastWriteTime).ToArray();
+            if (!_orderByFileName)
+                _fileList = _fileList.OrderBy(x => x.LastWriteTime).ToArray();
+
             _imageIndex = -_row * _column;
 
             ShowNextImageOnScreen();
@@ -232,14 +240,14 @@ namespace ImageViewer
             for (var i = 0; i < imageCount; i++)
             {
                 _pictureList[i].ImageLocation = _fileList[_imageIndex + i].FullName;
-                toolTip1.SetToolTip(_pictureList[i], _pictureList[i].ImageLocation);
+                SetImageTipInfo(_pictureList[i]);
                 SetSelectState(_pictureList[i]);
             }
 
             for (var i = imageCount; i < _row * _column; i++)
             {
                 _pictureList[i].ImageLocation = string.Empty;
-                toolTip1.SetToolTip(_pictureList[i], _pictureList[i].ImageLocation);
+                SetImageTipInfo(_pictureList[i]);
                 SetSelectState(_pictureList[i]);
             }
 
@@ -332,10 +340,15 @@ namespace ImageViewer
 
         private void lbSelectedFile_SelectedIndexChanged(object sender, EventArgs e)
         {
+            EnableShowImage(lbSelectedFile.Text);
+        }
+
+        private void EnableShowImage(string imageFullName)
+        {
             int i;
-            for ( i = 0; i < _fileList.Length; i++)
+            for (i = 0; i < _fileList.Length; i++)
             {
-                if (_fileList[i].FullName == lbSelectedFile.Text)
+                if (_fileList[i].FullName == imageFullName)
                     break;
             }
 
@@ -434,6 +447,18 @@ namespace ImageViewer
         {
             _imageIndex = (trackBarProgress.Value - 1) * _row * _column;
             ShowNextImageOnScreen();
+        }
+
+        private void rbOrderByName_CheckedChanged(object sender, EventArgs e)
+        {
+            _orderByFileName = true;
+            ShowImage(tbDir.Text);
+        }
+
+        private void rbOrderByTime_CheckedChanged(object sender, EventArgs e)
+        {
+            _orderByFileName = false;
+            ShowImage(tbDir.Text);
         }
 
         private void pictureBoxDetail_Click(object sender, EventArgs e)
