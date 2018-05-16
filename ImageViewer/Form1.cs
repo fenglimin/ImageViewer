@@ -166,7 +166,10 @@ namespace ImageViewer
 
         private void SetImageTipInfo(PictureBox pictureBox)
         {
-            toolTip1.SetToolTip(pictureBox, pictureBox.ImageLocation); ;
+            if (string.IsNullOrEmpty(pictureBox?.ImageLocation) )
+                return;
+
+            toolTip1.SetToolTip(pictureBox, pictureBox.ImageLocation);
         }
 
         private void OnImageClicked(object sender, EventArgs e)

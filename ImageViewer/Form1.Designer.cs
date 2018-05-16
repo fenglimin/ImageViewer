@@ -307,7 +307,7 @@
             // rb3x4
             // 
             this.rb3x4.AutoSize = true;
-            this.rb3x4.Location = new System.Drawing.Point(242, 126);
+            this.rb3x4.Location = new System.Drawing.Point(242, 125);
             this.rb3x4.Name = "rb3x4";
             this.rb3x4.Size = new System.Drawing.Size(50, 17);
             this.rb3x4.TabIndex = 21;
@@ -318,7 +318,7 @@
             // rb2x4
             // 
             this.rb2x4.AutoSize = true;
-            this.rb2x4.Location = new System.Drawing.Point(242, 102);
+            this.rb2x4.Location = new System.Drawing.Point(242, 101);
             this.rb2x4.Name = "rb2x4";
             this.rb2x4.Size = new System.Drawing.Size(50, 17);
             this.rb2x4.TabIndex = 20;
@@ -329,7 +329,7 @@
             // rb1x4
             // 
             this.rb1x4.AutoSize = true;
-            this.rb1x4.Location = new System.Drawing.Point(242, 79);
+            this.rb1x4.Location = new System.Drawing.Point(242, 77);
             this.rb1x4.Name = "rb1x4";
             this.rb1x4.Size = new System.Drawing.Size(50, 17);
             this.rb1x4.TabIndex = 19;
