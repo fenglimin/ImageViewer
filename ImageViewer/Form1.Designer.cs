@@ -63,6 +63,7 @@
             this.btBrowse = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.cbIncludeSubDir = new System.Windows.Forms.CheckBox();
             this.label4 = new System.Windows.Forms.Label();
             this.rbOrderByTime = new System.Windows.Forms.RadioButton();
             this.rbOrderByName = new System.Windows.Forms.RadioButton();
@@ -75,7 +76,7 @@
             this.btPrevPage = new System.Windows.Forms.Button();
             this.btFirstPage = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.cbIncludeSubDir = new System.Windows.Forms.CheckBox();
+            this.btDelete = new System.Windows.Forms.Button();
             this.gbImage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxDetail)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox10)).BeginInit();
@@ -499,6 +500,17 @@
             this.panel1.Size = new System.Drawing.Size(289, 26);
             this.panel1.TabIndex = 25;
             // 
+            // cbIncludeSubDir
+            // 
+            this.cbIncludeSubDir.AutoSize = true;
+            this.cbIncludeSubDir.Location = new System.Drawing.Point(199, 4);
+            this.cbIncludeSubDir.Name = "cbIncludeSubDir";
+            this.cbIncludeSubDir.Size = new System.Drawing.Size(84, 16);
+            this.cbIncludeSubDir.TabIndex = 25;
+            this.cbIncludeSubDir.Text = "包含子目录";
+            this.cbIncludeSubDir.UseVisualStyleBackColor = true;
+            this.cbIncludeSubDir.CheckedChanged += new System.EventHandler(this.cbIncludeSubDir_CheckedChanged);
+            // 
             // label4
             // 
             this.label4.AutoSize = true;
@@ -534,9 +546,9 @@
             // btExport
             // 
             this.btExport.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btExport.Location = new System.Drawing.Point(746, 20);
+            this.btExport.Location = new System.Drawing.Point(826, 20);
             this.btExport.Name = "btExport";
-            this.btExport.Size = new System.Drawing.Size(178, 30);
+            this.btExport.Size = new System.Drawing.Size(98, 30);
             this.btExport.TabIndex = 8;
             this.btExport.Text = "导出";
             this.btExport.UseVisualStyleBackColor = true;
@@ -546,6 +558,7 @@
             // 
             this.gbAction.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.gbAction.Controls.Add(this.btDelete);
             this.gbAction.Controls.Add(this.trackBarProgress);
             this.gbAction.Controls.Add(this.lblProgress);
             this.gbAction.Controls.Add(this.btLastPage);
@@ -625,16 +638,16 @@
             // 
             this.toolTip1.BackColor = System.Drawing.Color.Red;
             // 
-            // cbIncludeSubDir
+            // btDelete
             // 
-            this.cbIncludeSubDir.AutoSize = true;
-            this.cbIncludeSubDir.Location = new System.Drawing.Point(199, 4);
-            this.cbIncludeSubDir.Name = "cbIncludeSubDir";
-            this.cbIncludeSubDir.Size = new System.Drawing.Size(84, 16);
-            this.cbIncludeSubDir.TabIndex = 25;
-            this.cbIncludeSubDir.Text = "包含子目录";
-            this.cbIncludeSubDir.UseVisualStyleBackColor = true;
-            this.cbIncludeSubDir.CheckedChanged += new System.EventHandler(this.cbIncludeSubDir_CheckedChanged);
+            this.btDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btDelete.Location = new System.Drawing.Point(714, 20);
+            this.btDelete.Name = "btDelete";
+            this.btDelete.Size = new System.Drawing.Size(98, 30);
+            this.btDelete.TabIndex = 16;
+            this.btDelete.Text = "删除";
+            this.btDelete.UseVisualStyleBackColor = true;
+            this.btDelete.Click += new System.EventHandler(this.btDelete_Click);
             // 
             // Form1
             // 
@@ -724,6 +737,7 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.CheckBox cbIncludeSubDir;
+        private System.Windows.Forms.Button btDelete;
     }
 }
 

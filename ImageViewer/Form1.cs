@@ -154,6 +154,11 @@ namespace ImageViewer
                 CopyFile(fileInfo.FullName, Path.Combine(dialog.SelectedPath, fileInfo.Name));
                 lbSelectedFile.Items.Remove(file);
             }
+
+            for (var index = 0; index < _maxPicturesPerScreen; index++)
+            {
+                _pictureList[index].BackColor = System.Drawing.SystemColors.ControlDark;
+            }
         }
 
         private void CopyFile(string srcFile, string destFile)
@@ -570,6 +575,23 @@ namespace ImageViewer
         {
             if (_formLoading)
                 return;
+
+            ShowImage(tbDir.Text, 0);
+        }
+
+        private void btDelete_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("确定要删除这些文件吗？", "确认", MessageBoxButtons.YesNo) == DialogResult.No)
+                return;
+
+            var selectedFiles = new object[lbSelectedFile.Items.Count];
+            lbSelectedFile.Items.CopyTo(selectedFiles, 0);
+
+            foreach (var file in selectedFiles)
+            {
+                File.Delete(file as string);
+                lbSelectedFile.Items.Remove(file);
+            }
 
             ShowImage(tbDir.Text, 0);
         }
