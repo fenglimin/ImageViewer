@@ -91,6 +91,7 @@ namespace ImageViewer
             rbOrderByTime.Checked = !_orderByFileName;
 
             cbIncludeSubDir.Checked = LoadSetting("IncludeSubDir", "0") == "1";
+            cbImageOnly.Checked = LoadSetting("ImageOnly", "1") == "1";
 
             _layoutList[(_row - 1) * 4 + _column - 1].Checked = true;
         }
@@ -288,6 +289,12 @@ namespace ImageViewer
             var root = new DirectoryInfo(imageDir);
             _fileList = root.GetFiles("*.*", cbIncludeSubDir.Checked? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly);
 
+            if (cbImageOnly.Checked)
+            {
+                var supportedImageFiles = ".png;.bmp;.gif;.jpg;.jpeg".Split(';');
+                _fileList = (from fileInfo in _fileList from supportedImageFile in supportedImageFiles where supportedImageFile == fileInfo.Extension select fileInfo).ToArray();
+            }
+            
             if (!_orderByFileName)
                 _fileList = _fileList.OrderBy(x => x.LastWriteTime).ToArray();
 
@@ -547,6 +554,7 @@ namespace ImageViewer
             SaveSetting("SelectedFiles", selectedFiles);
 
             SaveSetting("IncludeSubDir", cbIncludeSubDir.Checked ? "1" : "0");
+            SaveSetting("ImageOnly", cbImageOnly.Checked ? "1" : "0");
             _config.Save(ConfigurationSaveMode.Minimal);
         }
 
@@ -592,6 +600,14 @@ namespace ImageViewer
                 File.Delete(file as string);
                 lbSelectedFile.Items.Remove(file);
             }
+
+            ShowImage(tbDir.Text, 0);
+        }
+
+        private void cbImageOnly_CheckedChanged(object sender, EventArgs e)
+        {
+            if (_formLoading)
+                return;
 
             ShowImage(tbDir.Text, 0);
         }

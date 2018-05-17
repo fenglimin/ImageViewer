@@ -77,6 +77,8 @@
             this.btFirstPage = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.btDelete = new System.Windows.Forms.Button();
+            this.label5 = new System.Windows.Forms.Label();
+            this.cbImageOnly = new System.Windows.Forms.CheckBox();
             this.gbImage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxDetail)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox10)).BeginInit();
@@ -100,7 +102,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 73);
+            this.label1.Location = new System.Drawing.Point(12, 108);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(41, 12);
             this.label1.TabIndex = 0;
@@ -280,6 +282,9 @@
             // 
             this.gbControl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.gbControl.Controls.Add(this.cbImageOnly);
+            this.gbControl.Controls.Add(this.label5);
+            this.gbControl.Controls.Add(this.cbIncludeSubDir);
             this.gbControl.Controls.Add(this.rb3x4);
             this.gbControl.Controls.Add(this.rb2x4);
             this.gbControl.Controls.Add(this.rb1x4);
@@ -309,7 +314,7 @@
             // rb3x4
             // 
             this.rb3x4.AutoSize = true;
-            this.rb3x4.Location = new System.Drawing.Point(242, 115);
+            this.rb3x4.Location = new System.Drawing.Point(242, 150);
             this.rb3x4.Name = "rb3x4";
             this.rb3x4.Size = new System.Drawing.Size(53, 16);
             this.rb3x4.TabIndex = 21;
@@ -320,7 +325,7 @@
             // rb2x4
             // 
             this.rb2x4.AutoSize = true;
-            this.rb2x4.Location = new System.Drawing.Point(242, 93);
+            this.rb2x4.Location = new System.Drawing.Point(242, 128);
             this.rb2x4.Name = "rb2x4";
             this.rb2x4.Size = new System.Drawing.Size(53, 16);
             this.rb2x4.TabIndex = 20;
@@ -331,7 +336,7 @@
             // rb1x4
             // 
             this.rb1x4.AutoSize = true;
-            this.rb1x4.Location = new System.Drawing.Point(242, 71);
+            this.rb1x4.Location = new System.Drawing.Point(242, 106);
             this.rb1x4.Name = "rb1x4";
             this.rb1x4.Size = new System.Drawing.Size(53, 16);
             this.rb1x4.TabIndex = 19;
@@ -342,7 +347,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(12, 139);
+            this.label2.Location = new System.Drawing.Point(12, 182);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(41, 12);
             this.label2.TabIndex = 18;
@@ -351,7 +356,7 @@
             // rb3x3
             // 
             this.rb3x3.AutoSize = true;
-            this.rb3x3.Location = new System.Drawing.Point(176, 115);
+            this.rb3x3.Location = new System.Drawing.Point(176, 150);
             this.rb3x3.Name = "rb3x3";
             this.rb3x3.Size = new System.Drawing.Size(53, 16);
             this.rb3x3.TabIndex = 17;
@@ -362,7 +367,7 @@
             // rb3x2
             // 
             this.rb3x2.AutoSize = true;
-            this.rb3x2.Location = new System.Drawing.Point(114, 115);
+            this.rb3x2.Location = new System.Drawing.Point(114, 150);
             this.rb3x2.Name = "rb3x2";
             this.rb3x2.Size = new System.Drawing.Size(53, 16);
             this.rb3x2.TabIndex = 16;
@@ -373,7 +378,7 @@
             // rb3x1
             // 
             this.rb3x1.AutoSize = true;
-            this.rb3x1.Location = new System.Drawing.Point(55, 115);
+            this.rb3x1.Location = new System.Drawing.Point(55, 150);
             this.rb3x1.Name = "rb3x1";
             this.rb3x1.Size = new System.Drawing.Size(53, 16);
             this.rb3x1.TabIndex = 15;
@@ -385,7 +390,7 @@
             // 
             this.rb2x3.AutoSize = true;
             this.rb2x3.Checked = true;
-            this.rb2x3.Location = new System.Drawing.Point(176, 93);
+            this.rb2x3.Location = new System.Drawing.Point(176, 128);
             this.rb2x3.Name = "rb2x3";
             this.rb2x3.Size = new System.Drawing.Size(53, 16);
             this.rb2x3.TabIndex = 14;
@@ -397,7 +402,7 @@
             // rb2x2
             // 
             this.rb2x2.AutoSize = true;
-            this.rb2x2.Location = new System.Drawing.Point(114, 93);
+            this.rb2x2.Location = new System.Drawing.Point(114, 128);
             this.rb2x2.Name = "rb2x2";
             this.rb2x2.Size = new System.Drawing.Size(53, 16);
             this.rb2x2.TabIndex = 13;
@@ -408,7 +413,7 @@
             // rb2x1
             // 
             this.rb2x1.AutoSize = true;
-            this.rb2x1.Location = new System.Drawing.Point(55, 93);
+            this.rb2x1.Location = new System.Drawing.Point(55, 128);
             this.rb2x1.Name = "rb2x1";
             this.rb2x1.Size = new System.Drawing.Size(53, 16);
             this.rb2x1.TabIndex = 12;
@@ -419,7 +424,7 @@
             // rb1x3
             // 
             this.rb1x3.AutoSize = true;
-            this.rb1x3.Location = new System.Drawing.Point(176, 71);
+            this.rb1x3.Location = new System.Drawing.Point(176, 106);
             this.rb1x3.Name = "rb1x3";
             this.rb1x3.Size = new System.Drawing.Size(53, 16);
             this.rb1x3.TabIndex = 11;
@@ -430,7 +435,7 @@
             // rb1x2
             // 
             this.rb1x2.AutoSize = true;
-            this.rb1x2.Location = new System.Drawing.Point(114, 71);
+            this.rb1x2.Location = new System.Drawing.Point(114, 106);
             this.rb1x2.Name = "rb1x2";
             this.rb1x2.Size = new System.Drawing.Size(53, 16);
             this.rb1x2.TabIndex = 10;
@@ -441,7 +446,7 @@
             // rb1x1
             // 
             this.rb1x1.AutoSize = true;
-            this.rb1x1.Location = new System.Drawing.Point(55, 71);
+            this.rb1x1.Location = new System.Drawing.Point(55, 106);
             this.rb1x1.Name = "rb1x1";
             this.rb1x1.Size = new System.Drawing.Size(53, 16);
             this.rb1x1.TabIndex = 9;
@@ -457,9 +462,9 @@
             this.lbSelectedFile.Font = new System.Drawing.Font("SimSun", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lbSelectedFile.FormattingEnabled = true;
             this.lbSelectedFile.ItemHeight = 14;
-            this.lbSelectedFile.Location = new System.Drawing.Point(14, 156);
+            this.lbSelectedFile.Location = new System.Drawing.Point(14, 212);
             this.lbSelectedFile.Name = "lbSelectedFile";
-            this.lbSelectedFile.Size = new System.Drawing.Size(281, 522);
+            this.lbSelectedFile.Size = new System.Drawing.Size(281, 466);
             this.lbSelectedFile.TabIndex = 7;
             this.lbSelectedFile.SelectedIndexChanged += new System.EventHandler(this.lbSelectedFile_SelectedIndexChanged);
             // 
@@ -491,11 +496,10 @@
             // 
             // panel1
             // 
-            this.panel1.Controls.Add(this.cbIncludeSubDir);
             this.panel1.Controls.Add(this.label4);
             this.panel1.Controls.Add(this.rbOrderByTime);
             this.panel1.Controls.Add(this.rbOrderByName);
-            this.panel1.Location = new System.Drawing.Point(6, 42);
+            this.panel1.Location = new System.Drawing.Point(6, 75);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(289, 26);
             this.panel1.TabIndex = 25;
@@ -503,7 +507,7 @@
             // cbIncludeSubDir
             // 
             this.cbIncludeSubDir.AutoSize = true;
-            this.cbIncludeSubDir.Location = new System.Drawing.Point(199, 4);
+            this.cbIncludeSubDir.Location = new System.Drawing.Point(55, 49);
             this.cbIncludeSubDir.Name = "cbIncludeSubDir";
             this.cbIncludeSubDir.Size = new System.Drawing.Size(84, 16);
             this.cbIncludeSubDir.TabIndex = 25;
@@ -523,7 +527,7 @@
             // rbOrderByTime
             // 
             this.rbOrderByTime.AutoSize = true;
-            this.rbOrderByTime.Location = new System.Drawing.Point(116, 3);
+            this.rbOrderByTime.Location = new System.Drawing.Point(170, 3);
             this.rbOrderByTime.Name = "rbOrderByTime";
             this.rbOrderByTime.Size = new System.Drawing.Size(47, 16);
             this.rbOrderByTime.TabIndex = 24;
@@ -649,6 +653,26 @@
             this.btDelete.UseVisualStyleBackColor = true;
             this.btDelete.Click += new System.EventHandler(this.btDelete_Click);
             // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(12, 49);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(41, 12);
+            this.label5.TabIndex = 26;
+            this.label5.Text = "文件：";
+            // 
+            // cbImageOnly
+            // 
+            this.cbImageOnly.AutoSize = true;
+            this.cbImageOnly.Location = new System.Drawing.Point(176, 49);
+            this.cbImageOnly.Name = "cbImageOnly";
+            this.cbImageOnly.Size = new System.Drawing.Size(84, 16);
+            this.cbImageOnly.TabIndex = 27;
+            this.cbImageOnly.Text = "仅显示图像";
+            this.cbImageOnly.UseVisualStyleBackColor = true;
+            this.cbImageOnly.CheckedChanged += new System.EventHandler(this.cbImageOnly_CheckedChanged);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -738,6 +762,8 @@
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.CheckBox cbIncludeSubDir;
         private System.Windows.Forms.Button btDelete;
+        private System.Windows.Forms.CheckBox cbImageOnly;
+        private System.Windows.Forms.Label label5;
     }
 }
 
