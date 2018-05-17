@@ -75,6 +75,7 @@
             this.btPrevPage = new System.Windows.Forms.Button();
             this.btFirstPage = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.cbIncludeSubDir = new System.Windows.Forms.CheckBox();
             this.gbImage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxDetail)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox10)).BeginInit();
@@ -489,6 +490,7 @@
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.cbIncludeSubDir);
             this.panel1.Controls.Add(this.label4);
             this.panel1.Controls.Add(this.rbOrderByTime);
             this.panel1.Controls.Add(this.rbOrderByName);
@@ -509,7 +511,7 @@
             // rbOrderByTime
             // 
             this.rbOrderByTime.AutoSize = true;
-            this.rbOrderByTime.Location = new System.Drawing.Point(170, 3);
+            this.rbOrderByTime.Location = new System.Drawing.Point(116, 3);
             this.rbOrderByTime.Name = "rbOrderByTime";
             this.rbOrderByTime.Size = new System.Drawing.Size(47, 16);
             this.rbOrderByTime.TabIndex = 24;
@@ -623,6 +625,17 @@
             // 
             this.toolTip1.BackColor = System.Drawing.Color.Red;
             // 
+            // cbIncludeSubDir
+            // 
+            this.cbIncludeSubDir.AutoSize = true;
+            this.cbIncludeSubDir.Location = new System.Drawing.Point(199, 4);
+            this.cbIncludeSubDir.Name = "cbIncludeSubDir";
+            this.cbIncludeSubDir.Size = new System.Drawing.Size(84, 16);
+            this.cbIncludeSubDir.TabIndex = 25;
+            this.cbIncludeSubDir.Text = "包含子目录";
+            this.cbIncludeSubDir.UseVisualStyleBackColor = true;
+            this.cbIncludeSubDir.CheckedChanged += new System.EventHandler(this.cbIncludeSubDir_CheckedChanged);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -710,6 +723,7 @@
         private System.Windows.Forms.RadioButton rbOrderByName;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.CheckBox cbIncludeSubDir;
     }
 }
 

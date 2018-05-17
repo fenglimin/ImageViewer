@@ -17,7 +17,7 @@ namespace ImageViewer
 {
     public partial class Form1 : Form
     {
-        private int _row = 0, _column = 0;
+        private int _row = 2, _column = 3;
         private PictureBox[]  _pictureList = new PictureBox[12];
         private RadioButton[] _layoutList = new RadioButton[12];
         private FileInfo[] _fileList;
@@ -25,7 +25,8 @@ namespace ImageViewer
         private int _imageIndexDetail = 0;
         private bool _formLoading = true;
         private int _maxPicturesPerScreen = 12;
-        private bool _orderByFileName;
+        private bool _orderByFileName = true;
+        private Configuration _config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
 
         public Form1()
         {
@@ -68,28 +69,36 @@ namespace ImageViewer
                 _pictureList[index].Click += new EventHandler(OnImageClicked);
             }
 
-            
-            
 
-            var config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
-            tbDir.Text = config.AppSettings.Settings["ImageDir"].Value;
-            _orderByFileName = config.AppSettings.Settings["OrderByName"].Value == "1";
-            _imageIndex = int.Parse(config.AppSettings.Settings["ImageIndex"].Value);
-            _row = int.Parse(config.AppSettings.Settings["Row"].Value);
-            _column = int.Parse(config.AppSettings.Settings["Column"].Value);
-            var selectedFiles = config.AppSettings.Settings["SelectedFiles"].Value;
-            object[] fileList = selectedFiles.Split(new char[]{';'}, StringSplitOptions.RemoveEmptyEntries);
-            lbSelectedFile.Items.AddRange(fileList);
-            
-            rbOrderByName.Checked = _orderByFileName;
-            rbOrderByTime.Checked = !_orderByFileName;
-            _layoutList[(_row-1)*4 + _column - 1].Checked = true;
-
-
+            LoadConfig();
             AdjustSize(true);
             ShowImage(tbDir.Text, _imageIndex);
-
             _formLoading = false;
+        }
+
+        private void LoadConfig()
+        {
+            tbDir.Text = LoadSetting("ImageDir", @"C:\Temp\Image");
+            _orderByFileName = LoadSetting("OrderByName", "1") == "1";
+            _imageIndex = int.Parse(LoadSetting("ImageIndex", "0"));
+            _row = int.Parse(LoadSetting("Row", "2"));
+            _column = int.Parse(LoadSetting("Column", "3"));
+            var selectedFiles = LoadSetting("SelectedFiles", "");
+            object[] fileList = selectedFiles.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+            lbSelectedFile.Items.AddRange(fileList);
+
+            rbOrderByName.Checked = _orderByFileName;
+            rbOrderByTime.Checked = !_orderByFileName;
+
+            cbIncludeSubDir.Checked = LoadSetting("IncludeSubDir", "0") == "1";
+
+            _layoutList[(_row - 1) * 4 + _column - 1].Checked = true;
+        }
+
+        private string LoadSetting(string key, string defaultValue)
+        {
+            var setting = _config.AppSettings.Settings[key];
+            return setting == null ? defaultValue : setting.Value;
         }
 
         private void Form1_SizeChanged(object sender, EventArgs e)
@@ -255,8 +264,8 @@ namespace ImageViewer
             if (!Directory.Exists(imageDir))
                 return;
 
-            DirectoryInfo root = new DirectoryInfo(imageDir);
-            _fileList = root.GetFiles();
+            var root = new DirectoryInfo(imageDir);
+            _fileList = root.GetFiles("*.*", cbIncludeSubDir.Checked? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly);
 
             if (!_orderByFileName)
                 _fileList = _fileList.OrderBy(x => x.LastWriteTime).ToArray();
@@ -507,18 +516,24 @@ namespace ImageViewer
 
         private void Form1_FormClosed(object sender, FormClosedEventArgs e)
         {
-            var config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
-            config.AppSettings.Settings["ImageDir"].Value = tbDir.Text;
-            config.AppSettings.Settings["OrderByName"].Value = rbOrderByName.Checked? "1" : "0";
-            config.AppSettings.Settings["ImageIndex"].Value = _imageIndex.ToString(CultureInfo.InvariantCulture);
-            config.AppSettings.Settings["Row"].Value = _row.ToString(CultureInfo.InvariantCulture);
-            config.AppSettings.Settings["Column"].Value = _column.ToString(CultureInfo.InvariantCulture);
+            SaveSetting("ImageDir", tbDir.Text);
+            SaveSetting("OrderByName", rbOrderByName.Checked? "1" : "0");
+            SaveSetting("ImageIndex", _imageIndex.ToString(CultureInfo.InvariantCulture));
+            SaveSetting("Row", _row.ToString(CultureInfo.InvariantCulture));
+            SaveSetting("Column", _column.ToString(CultureInfo.InvariantCulture));
 
             var selectedFiles = lbSelectedFile.Items.Cast<object>().Aggregate(string.Empty, (current, item) => current + (item + ";"));
-            config.AppSettings.Settings["SelectedFiles"].Value = selectedFiles;
-            config.Save(ConfigurationSaveMode.Minimal);
+            SaveSetting("SelectedFiles", selectedFiles);
+
+            SaveSetting("IncludeSubDir", cbIncludeSubDir.Checked ? "1" : "0");
+            _config.Save(ConfigurationSaveMode.Minimal);
         }
 
+        private void SaveSetting(string key, string value)
+        {
+            _config.AppSettings.Settings.Remove(key);
+            _config.AppSettings.Settings.Add(key, value);
+        }
         private void pictureBoxDetail_Click(object sender, EventArgs e)
         {
             var pictureBox = sender as PictureBox;
@@ -533,6 +548,14 @@ namespace ImageViewer
                 gbAction.Enabled = true;
                 gbControl.Enabled = true;
             }
+        }
+
+        private void cbIncludeSubDir_CheckedChanged(object sender, EventArgs e)
+        {
+            if (_formLoading)
+                return;
+
+            ShowImage(tbDir.Text, 0);
         }
 
     }
