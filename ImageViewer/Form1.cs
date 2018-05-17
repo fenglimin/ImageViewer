@@ -151,11 +151,27 @@ namespace ImageViewer
             {
                 var fileInfo = new FileInfo(file as string);
 
-                File.Copy(fileInfo.FullName, Path.Combine(dialog.SelectedPath, fileInfo.Name), true);
+                CopyFile(fileInfo.FullName, Path.Combine(dialog.SelectedPath, fileInfo.Name));
                 lbSelectedFile.Items.Remove(file);
             }
         }
 
+        private void CopyFile(string srcFile, string destFile)
+        {
+            try
+            {
+                if (File.Exists(destFile))
+                {
+                    var fileInfo = new FileInfo(destFile);
+                    destFile = Path.Combine(fileInfo.DirectoryName, DateTime.Now.ToBinary() + fileInfo.Name);
+                }
+                File.Copy(srcFile, destFile);
+            }
+            catch (Exception)
+            {
+
+            }
+        }
 
         private void OnRowColumnChanged(int row, int column, bool sizeChanged)
         {
