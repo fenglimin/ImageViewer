@@ -41,6 +41,8 @@ namespace ImageViewer
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            WriteShellRunReg();
+
             _pictureList[0] = pictureBox1;
             _pictureList[1] = pictureBox2;
             _pictureList[2] = pictureBox3;
@@ -629,6 +631,9 @@ namespace ImageViewer
 
         private void Form1_FormClosed(object sender, FormClosedEventArgs e)
         {
+            //if (MessageBox.Show("需要保存图像浏览记录吗？", "确认", MessageBoxButtons.YesNo) == DialogResult.No)
+            //    return;
+
             SaveSetting("ImageDir", tbDir.Text);
             SaveSetting("OrderByName", rbOrderByName.Checked? "1" : "0");
             if (_imageIndex < 0)
@@ -654,6 +659,7 @@ namespace ImageViewer
             _config.AppSettings.Settings.Remove(key);
             _config.AppSettings.Settings.Add(key, value);
         }
+
         private void pictureBoxDetail_Click(object sender, EventArgs e)
         {
             var pictureBox = sender as PictureBox;
@@ -701,6 +707,17 @@ namespace ImageViewer
                 return;
 
             ShowImage(tbDir.Text, 0);
+        }
+
+        private void WriteShellRunReg()
+        {
+            var root = Registry.ClassesRoot;
+            
+            var command = root.CreateSubKey(@"Folder\shell\ImageViewer\command");
+            command.SetValue("", "\"" + Application.ExecutablePath + "\" \"%1\"");
+
+            command = root.CreateSubKey(@"\*\shell\ImageViewer\Command");
+            command.SetValue("", "\"" + Application.ExecutablePath + "\" \"%1\"");
         }
 
     }
