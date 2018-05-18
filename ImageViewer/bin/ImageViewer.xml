@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<configuration>
+    <appSettings>
+        <add key="ImageDir" value="D:\Git\ImageViewer\ImageViewer\bin" />
+        <add key="OrderByName" value="1" />
+        <add key="ImageIndex" value="0" />
+        <add key="Row" value="1" />
+        <add key="Column" value="3" />
+        <add key="SelectedFiles" />
+        <add key="IncludeSubDir" value="0" />
+        <add key="ImageOnly" value="1" />
+        <add key="ExportDir" value="C:\" />
+        <add key="DeleteAfterExport" value="1" />
+    </appSettings>
+</configuration>

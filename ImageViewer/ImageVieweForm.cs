@@ -12,11 +12,12 @@ using System.Collections;
 using System.Configuration;
 using System.IO;
 using System.Runtime.InteropServices;
+using Microsoft.Win32;
 
 
 namespace ImageViewer
 {
-    public partial class Form1 : Form
+    public partial class ImageVieweForm : Form
     {
         private int _row = 2, _column = 3;
         private PictureBox[]  _pictureList = new PictureBox[12];
@@ -29,9 +30,11 @@ namespace ImageViewer
         private bool _orderByFileName = true;
         private string _exportDir = string.Empty;
         private bool _deleteAfterExport = false;
-        private Configuration _config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
+        private string _workingDir = string.Empty;
+        private Configuration _config = null;
+        private string _openedImageByCmd = string.Empty;
 
-        public Form1()
+        public ImageVieweForm()
         {
             InitializeComponent();
         }
@@ -74,17 +77,42 @@ namespace ImageViewer
 
             pictureBoxDetail.MouseWheel += OnMouseWheel;
 
+            var cmdLine = Environment.GetCommandLineArgs();
+            if (cmdLine.Count() == 2)
+            {
+                var fileInfo = new FileInfo(cmdLine[1]);
+                if (fileInfo.Attributes == FileAttributes.Directory)
+                    _workingDir = cmdLine[1];
+                else
+                {
+                    _openedImageByCmd = cmdLine[1];
+                    _workingDir = fileInfo.DirectoryName;
+                }
+                
+                var map = new ExeConfigurationFileMap { ExeConfigFilename = Path.Combine(_workingDir, "ImageViewer.xml") };
+                _config = ConfigurationManager.OpenMappedExeConfiguration(map, ConfigurationUserLevel.None);
+            }
+            else
+            {
+                _workingDir = @"C:\Temp\Image";
+                _config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
+            }
+
+            
+
             LoadConfig();
+            _formLoading = false;
             AdjustSize(true);
             ShowImage(tbDir.Text, _imageIndex);
-            _formLoading = false;
         }
 
         private void LoadConfig()
         {
-            tbDir.Text = LoadSetting("ImageDir", @"C:\Temp\Image");
+            tbDir.Text = LoadSetting("ImageDir", _workingDir);
             _orderByFileName = LoadSetting("OrderByName", "1") == "1";
             _imageIndex = int.Parse(LoadSetting("ImageIndex", "0"));
+            if (_imageIndex < 0)
+                _imageIndex = 0;
             _row = int.Parse(LoadSetting("Row", "2"));
             _column = int.Parse(LoadSetting("Column", "3"));
             var selectedFiles = LoadSetting("SelectedFiles", "");
@@ -99,6 +127,13 @@ namespace ImageViewer
 
             _exportDir = LoadSetting("ExportDir", @"C:\");
             _deleteAfterExport = LoadSetting("DeleteAfterExport", "1") == "1";
+
+            if (_openedImageByCmd != string.Empty)
+            {
+                _row = 1;
+                _column = 1;
+                cbImageOnly.Checked = false;
+            }
 
             _layoutList[(_row - 1) * 4 + _column - 1].Checked = true;
         }
@@ -209,6 +244,9 @@ namespace ImageViewer
 
         private void OnRowColumnChanged(int row, int column, bool sizeChanged)
         {
+            if (_formLoading)
+                return;
+
             if ((_row == row && _column == column) && !sizeChanged)
                 return;
 
@@ -239,7 +277,7 @@ namespace ImageViewer
                     _pictureList[index].Size = pictureSize;
                     _pictureList[index].Visible = true;
 
-                    if (_fileList != null && _imageIndex + index < _fileList.Length)
+                    if (_fileList != null && _imageIndex + index < _fileList.Length && _imageIndex + index > 0)
                     {
                         if (_pictureList[index].ImageLocation != _fileList[_imageIndex + index].FullName)
                         {
@@ -319,16 +357,22 @@ namespace ImageViewer
             var root = new DirectoryInfo(imageDir);
             _fileList = root.GetFiles("*.*", cbIncludeSubDir.Checked? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly);
 
+            if (!_fileList.Any())
+                return;
+
             if (cbImageOnly.Checked)
             {
                 var supportedImageFiles = ".png;.bmp;.gif;.jpg;.jpeg".Split(';');
-                _fileList = (from fileInfo in _fileList from supportedImageFile in supportedImageFiles where supportedImageFile == fileInfo.Extension select fileInfo).ToArray();
+                _fileList = (from fileInfo in _fileList from supportedImageFile in supportedImageFiles where supportedImageFile == fileInfo.Extension.ToLower() select fileInfo).ToArray();
             }
             
             if (!_orderByFileName)
                 _fileList = _fileList.OrderBy(x => x.LastWriteTime).ToArray();
 
-            _imageIndex = currentIndex - _row * _column;
+            if (string.IsNullOrEmpty(_openedImageByCmd))
+                _imageIndex = currentIndex - _row*_column;
+            else
+                _imageIndex = FindImageIndex(_openedImageByCmd)-2;
 
             ShowNextImageOnScreen();
             UpdateTrackBar();
@@ -336,7 +380,7 @@ namespace ImageViewer
 
         private void UpdateTrackBar()
         {
-            if (_fileList == null)
+            if (_fileList == null || _fileList.Count() == 0)
                 return;
 
             trackBarProgress.Minimum = 0;
@@ -459,7 +503,7 @@ namespace ImageViewer
             EnableShowImage(lbSelectedFile.Text);
         }
 
-        private void EnableShowImage(string imageFullName)
+        private int FindImageIndex(string imageFullName)
         {
             int i;
             for (i = 0; i < _fileList.Length; i++)
@@ -469,11 +513,20 @@ namespace ImageViewer
             }
 
             if (i == _fileList.Length)
-                return;
+                return -1;
 
             int count = _row * _column;
-            _imageIndex = (i / count) * count + count;
-            ShowPrevImageOnScreen();
+            return (i / count) * count + count; 
+        }
+
+        private void EnableShowImage(string imageFullName)
+        {
+            var index = FindImageIndex(imageFullName);
+            if (index != -1)
+            {
+                _imageIndex = index;
+                ShowPrevImageOnScreen();
+            }
         }
 
         private void rb1x1_CheckedChanged(object sender, EventArgs e)
@@ -578,6 +631,8 @@ namespace ImageViewer
         {
             SaveSetting("ImageDir", tbDir.Text);
             SaveSetting("OrderByName", rbOrderByName.Checked? "1" : "0");
+            if (_imageIndex < 0)
+                _imageIndex = 0;
             SaveSetting("ImageIndex", _imageIndex.ToString(CultureInfo.InvariantCulture));
             SaveSetting("Row", _row.ToString(CultureInfo.InvariantCulture));
             SaveSetting("Column", _column.ToString(CultureInfo.InvariantCulture));
