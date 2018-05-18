@@ -11,6 +11,7 @@ using System.Windows.Forms;
 using System.Collections;
 using System.Configuration;
 using System.IO;
+using System.Runtime.InteropServices;
 
 
 namespace ImageViewer
@@ -26,6 +27,8 @@ namespace ImageViewer
         private bool _formLoading = true;
         private int _maxPicturesPerScreen = 12;
         private bool _orderByFileName = true;
+        private string _exportDir = string.Empty;
+        private bool _deleteAfterExport = false;
         private Configuration _config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
 
         public Form1()
@@ -69,6 +72,7 @@ namespace ImageViewer
                 _pictureList[index].Click += new EventHandler(OnImageClicked);
             }
 
+            pictureBoxDetail.MouseWheel += OnMouseWheel;
 
             LoadConfig();
             AdjustSize(true);
@@ -92,6 +96,9 @@ namespace ImageViewer
 
             cbIncludeSubDir.Checked = LoadSetting("IncludeSubDir", "0") == "1";
             cbImageOnly.Checked = LoadSetting("ImageOnly", "1") == "1";
+
+            _exportDir = LoadSetting("ExportDir", @"C:\");
+            _deleteAfterExport = LoadSetting("DeleteAfterExport", "1") == "1";
 
             _layoutList[(_row - 1) * 4 + _column - 1].Checked = true;
         }
@@ -139,11 +146,18 @@ namespace ImageViewer
 
         private void btExport_Click(object sender, EventArgs e)
         {
-            var dialog = new FolderBrowserDialog { Description = "请选择文件路径", SelectedPath = tbDir.Text };
+            var exportForm = new ExportForm
+            {
+                ExportDir = _exportDir,
+                DeleteAfterExport = _deleteAfterExport
+            };
 
-            if (dialog.ShowDialog() != DialogResult.OK)
+            exportForm.ShowDialog();
+            if (!exportForm.NeedExport)
                 return;
 
+            _exportDir = exportForm.ExportDir;
+            _deleteAfterExport = exportForm.DeleteAfterExport;
 
             var selectedFiles = new object[lbSelectedFile.Items.Count];
             lbSelectedFile.Items.CopyTo(selectedFiles, 0);
@@ -151,14 +165,28 @@ namespace ImageViewer
             foreach (var file in selectedFiles)
             {
                 var fileInfo = new FileInfo(file as string);
-
-                CopyFile(fileInfo.FullName, Path.Combine(dialog.SelectedPath, fileInfo.Name));
+                CopyFile(fileInfo.FullName, Path.Combine(_exportDir, fileInfo.Name));
                 lbSelectedFile.Items.Remove(file);
             }
 
-            for (var index = 0; index < _maxPicturesPerScreen; index++)
+            if (_deleteAfterExport)
             {
-                _pictureList[index].BackColor = System.Drawing.SystemColors.ControlDark;
+                if (MessageBox.Show("导出完成，确定要删除这些文件吗？", "确认", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                {
+                    foreach (var file in selectedFiles)
+                    {
+                        File.Delete(file as string);
+                    }
+
+                    ShowImage(tbDir.Text, 0);
+                }
+            }
+            else
+            {
+                for (var index = 0; index < _maxPicturesPerScreen; index++)
+                {
+                    _pictureList[index].BackColor = System.Drawing.SystemColors.ControlDark;
+                }
             }
         }
 
@@ -262,6 +290,8 @@ namespace ImageViewer
                     lbSelectedFile.Items.Remove(pictureBox.ImageLocation);
                     pictureBox.BackColor = System.Drawing.SystemColors.ControlDark;
                 }
+
+                btExport.Enabled = btDelete.Enabled = lbSelectedFile.Items.Count > 0;
             }
             else if (mouseE.Button == System.Windows.Forms.MouseButtons.Right)
             {
@@ -349,6 +379,8 @@ namespace ImageViewer
             btLastPage.Enabled = btNextPage.Enabled;
 
             lblProgress.Text = string.Format("{0} / {1}", _imageIndex / (_row * _column) + 1, (_fileList.Length - 1) / (_row * _column) + 1);
+
+            btExport.Enabled = btDelete.Enabled = lbSelectedFile.Items.Count > 0;
         }
 
         private void ShowNextImageOnScreen()
@@ -555,6 +587,10 @@ namespace ImageViewer
 
             SaveSetting("IncludeSubDir", cbIncludeSubDir.Checked ? "1" : "0");
             SaveSetting("ImageOnly", cbImageOnly.Checked ? "1" : "0");
+
+            SaveSetting("ExportDir", _exportDir);
+            SaveSetting("DeleteAfterExport", _deleteAfterExport ? "1" : "0");
+
             _config.Save(ConfigurationSaveMode.Minimal);
         }
 
