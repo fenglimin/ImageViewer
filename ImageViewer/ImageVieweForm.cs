@@ -128,13 +128,14 @@ namespace ImageViewer
             cbImageOnly.Checked = LoadSetting("ImageOnly", "1") == "1";
 
             _exportDir = LoadSetting("ExportDir", @"C:\");
-            _deleteAfterExport = LoadSetting("DeleteAfterExport", "1") == "1";
+            _deleteAfterExport = LoadSetting("DeleteAfterExport", "0") == "1";
 
             if (_openedImageByCmd != string.Empty)
             {
                 _row = 1;
                 _column = 1;
                 cbImageOnly.Checked = false;
+
             }
 
             _layoutList[(_row - 1) * 4 + _column - 1].Checked = true;
@@ -172,6 +173,7 @@ namespace ImageViewer
             if (dialog.ShowDialog() != DialogResult.OK)
                 return;
 
+            _openedImageByCmd = string.Empty;
             tbDir.Text = dialog.SelectedPath;
             ShowImage(tbDir.Text, 0);
         }
@@ -370,6 +372,10 @@ namespace ImageViewer
             
             if (!_orderByFileName)
                 _fileList = _fileList.OrderBy(x => x.LastWriteTime).ToArray();
+            else
+                _fileList = _fileList.OrderBy(x => x.FullName).ToArray();
+
+            //_fileList = _fileList.OrderBy(x => x.Length).ToArray();
 
             if (string.IsNullOrEmpty(_openedImageByCmd))
                 _imageIndex = currentIndex - _row*_column;
@@ -387,7 +393,12 @@ namespace ImageViewer
 
             trackBarProgress.Minimum = 0;
             trackBarProgress.Maximum = _fileList.Length % (_row * _column) == 0 ? _fileList.Length / (_row * _column) - 1 : _fileList.Length / (_row * _column);
-            trackBarProgress.Value = _imageIndex / (_row * _column);
+            var pos = _imageIndex / (_row * _column);
+            if (pos < trackBarProgress.Minimum)
+                pos = trackBarProgress.Minimum;
+            if (pos > trackBarProgress.Maximum)
+                pos = trackBarProgress.Maximum;
+            trackBarProgress.Value = pos;
         }
 
         private void ShowOneScreen()
