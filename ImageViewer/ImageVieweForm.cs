@@ -727,7 +727,7 @@ namespace ImageViewer
             var command = root.CreateSubKey(@"Folder\shell\ImageViewer\command");
             command.SetValue("", "\"" + Application.ExecutablePath + "\" \"%1\"");
 
-            command = root.CreateSubKey(@"\*\shell\ImageViewer\Command");
+            command = root.CreateSubKey(@"*\shell\ImageViewer\Command");
             command.SetValue("", "\"" + Application.ExecutablePath + "\" \"%1\"");
         }
 
