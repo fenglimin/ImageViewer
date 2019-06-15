@@ -27,7 +27,7 @@ namespace ImageViewer
         private int _imageIndexDetail = 0;
         private bool _formLoading = true;
         private int _maxPicturesPerScreen = 12;
-        private bool _orderByFileName = true;
+        private int _orderBy = 0;
         private string _exportDir = string.Empty;
         private bool _deleteAfterExport = false;
         private string _workingDir = string.Empty;
@@ -96,7 +96,7 @@ namespace ImageViewer
             }
             else
             {
-                _workingDir = @"C:\Temp\Image";
+                _workingDir = Application.StartupPath;
                 _config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
             }
 
@@ -110,8 +110,21 @@ namespace ImageViewer
 
         private void LoadConfig()
         {
-            tbDir.Text = LoadSetting("ImageDir", _workingDir);
-            _orderByFileName = LoadSetting("OrderByName", "1") == "1";
+            var dir = LoadSetting("ImageDir", _workingDir);
+            if (!Directory.Exists(dir))
+            {
+                dir = _workingDir;
+            }
+            else
+            {
+                if (dir != _workingDir)
+                {
+                    MessageBox.Show("当前目录与配置文件中的目录不一致，将默认加载配置文件中的目录！", "信息", MessageBoxButtons.OK);
+                }
+            }
+
+            tbDir.Text = dir;
+            _orderBy = int.Parse(LoadSetting("OrderBy", "0"));
             _imageIndex = int.Parse(LoadSetting("ImageIndex", "0"));
             if (_imageIndex < 0)
                 _imageIndex = 0;
@@ -121,8 +134,10 @@ namespace ImageViewer
             object[] fileList = selectedFiles.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
             lbSelectedFile.Items.AddRange(fileList);
 
-            rbOrderByName.Checked = _orderByFileName;
-            rbOrderByTime.Checked = !_orderByFileName;
+            rbOrderByName.Checked = _orderBy == 0;
+            rbOrderByTime.Checked = _orderBy == 1;
+            rbOrderBySize.Checked = _orderBy == 2;
+
 
             cbIncludeSubDir.Checked = LoadSetting("IncludeSubDir", "0") == "1";
             cbImageOnly.Checked = LoadSetting("ImageOnly", "1") == "1";
@@ -370,12 +385,12 @@ namespace ImageViewer
                 _fileList = (from fileInfo in _fileList from supportedImageFile in supportedImageFiles where supportedImageFile == fileInfo.Extension.ToLower() select fileInfo).ToArray();
             }
             
-            if (!_orderByFileName)
+            if (_orderBy == 0)
                 _fileList = _fileList.OrderBy(x => x.LastWriteTime).ToArray();
-            else
+            else if (_orderBy == 1)
                 _fileList = _fileList.OrderBy(x => x.FullName).ToArray();
-
-            //_fileList = _fileList.OrderBy(x => x.Length).ToArray();
+            else
+                _fileList = _fileList.OrderBy(x => x.Length).ToArray();
 
             if (string.IsNullOrEmpty(_openedImageByCmd))
                 _imageIndex = currentIndex - _row*_column;
@@ -410,6 +425,9 @@ namespace ImageViewer
             for (var i = 0; i < imageCount; i++)
             {
                 _pictureList[i].ImageLocation = _fileList[_imageIndex + i].FullName;
+
+                var image = _pictureList[i];
+
                 SetImageTipInfo(_pictureList[i]);
                 SetSelectState(_pictureList[i]);
             }
@@ -631,22 +649,13 @@ namespace ImageViewer
             ShowNextImageOnScreen();
         }
 
-        private void rbOrderByName_CheckedChanged(object sender, EventArgs e)
-        {
-            if (!_formLoading)
-            {
-                _orderByFileName = rbOrderByName.Checked;
-                ShowImage(tbDir.Text, 0);
-            }
-        }
-
         private void Form1_FormClosed(object sender, FormClosedEventArgs e)
         {
             //if (MessageBox.Show("需要保存图像浏览记录吗？", "确认", MessageBoxButtons.YesNo) == DialogResult.No)
             //    return;
 
             SaveSetting("ImageDir", tbDir.Text);
-            SaveSetting("OrderByName", rbOrderByName.Checked? "1" : "0");
+            SaveSetting("OrderBy", rbOrderByName.Checked? "0" : rbOrderByTime.Checked? "1" : "2");
             if (_imageIndex < 0)
                 _imageIndex = 0;
             SaveSetting("ImageIndex", _imageIndex.ToString(CultureInfo.InvariantCulture));
@@ -717,7 +726,35 @@ namespace ImageViewer
             if (_formLoading)
                 return;
 
+            _orderBy = 0;
             ShowImage(tbDir.Text, 0);
+        }
+
+        private void rbOrderByTime_CheckedChanged(object sender, EventArgs e)
+        {
+            if (!_formLoading)
+            {
+                _orderBy = 1;
+                ShowImage(tbDir.Text, 0);
+            }
+        }
+
+        private void rbOrderBySize_CheckedChanged(object sender, EventArgs e)
+        {
+            if (!_formLoading)
+            {
+                _orderBy = 2;
+                ShowImage(tbDir.Text, 0);
+            }
+        }
+
+        private void rbOrderByName_CheckedChanged(object sender, EventArgs e)
+        {
+            if (!_formLoading)
+            {
+                _orderBy = 0;
+                ShowImage(tbDir.Text, 0);
+            }
         }
 
         private void WriteShellRunReg()

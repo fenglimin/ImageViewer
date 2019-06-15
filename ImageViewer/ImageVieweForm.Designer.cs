@@ -66,6 +66,7 @@
             this.btBrowse = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.rbOrderBySize = new System.Windows.Forms.RadioButton();
             this.label4 = new System.Windows.Forms.Label();
             this.rbOrderByTime = new System.Windows.Forms.RadioButton();
             this.rbOrderByName = new System.Windows.Forms.RadioButton();
@@ -102,9 +103,10 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 117);
+            this.label1.Location = new System.Drawing.Point(16, 144);
+            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(43, 13);
+            this.label1.Size = new System.Drawing.Size(50, 17);
             this.label1.TabIndex = 0;
             this.label1.Text = "显示：";
             // 
@@ -125,9 +127,11 @@
             this.gbImage.Controls.Add(this.pictureBox3);
             this.gbImage.Controls.Add(this.pictureBox2);
             this.gbImage.Controls.Add(this.pictureBox1);
-            this.gbImage.Location = new System.Drawing.Point(7, 1);
+            this.gbImage.Location = new System.Drawing.Point(9, 1);
+            this.gbImage.Margin = new System.Windows.Forms.Padding(4);
             this.gbImage.Name = "gbImage";
-            this.gbImage.Size = new System.Drawing.Size(930, 699);
+            this.gbImage.Padding = new System.Windows.Forms.Padding(4);
+            this.gbImage.Size = new System.Drawing.Size(1240, 860);
             this.gbImage.TabIndex = 1;
             this.gbImage.TabStop = false;
             // 
@@ -138,9 +142,10 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.pictureBoxDetail.BackColor = System.Drawing.SystemColors.ControlDark;
             this.pictureBoxDetail.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.pictureBoxDetail.Location = new System.Drawing.Point(380, 634);
+            this.pictureBoxDetail.Location = new System.Drawing.Point(507, 780);
+            this.pictureBoxDetail.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBoxDetail.Name = "pictureBoxDetail";
-            this.pictureBoxDetail.Size = new System.Drawing.Size(178, 38);
+            this.pictureBoxDetail.Size = new System.Drawing.Size(236, 46);
             this.pictureBoxDetail.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBoxDetail.TabIndex = 12;
             this.pictureBoxDetail.TabStop = false;
@@ -150,9 +155,10 @@
             // 
             this.pictureBox10.BackColor = System.Drawing.SystemColors.ControlDark;
             this.pictureBox10.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.pictureBox10.Location = new System.Drawing.Point(714, 462);
+            this.pictureBox10.Location = new System.Drawing.Point(952, 569);
+            this.pictureBox10.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBox10.Name = "pictureBox10";
-            this.pictureBox10.Size = new System.Drawing.Size(178, 165);
+            this.pictureBox10.Size = new System.Drawing.Size(236, 202);
             this.pictureBox10.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox10.TabIndex = 11;
             this.pictureBox10.TabStop = false;
@@ -161,9 +167,10 @@
             // 
             this.pictureBox11.BackColor = System.Drawing.SystemColors.ControlDark;
             this.pictureBox11.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.pictureBox11.Location = new System.Drawing.Point(714, 254);
+            this.pictureBox11.Location = new System.Drawing.Point(952, 313);
+            this.pictureBox11.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBox11.Name = "pictureBox11";
-            this.pictureBox11.Size = new System.Drawing.Size(178, 165);
+            this.pictureBox11.Size = new System.Drawing.Size(236, 202);
             this.pictureBox11.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox11.TabIndex = 10;
             this.pictureBox11.TabStop = false;
@@ -172,9 +179,10 @@
             // 
             this.pictureBox12.BackColor = System.Drawing.SystemColors.ControlDark;
             this.pictureBox12.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.pictureBox12.Location = new System.Drawing.Point(714, 43);
+            this.pictureBox12.Location = new System.Drawing.Point(952, 53);
+            this.pictureBox12.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBox12.Name = "pictureBox12";
-            this.pictureBox12.Size = new System.Drawing.Size(178, 165);
+            this.pictureBox12.Size = new System.Drawing.Size(236, 202);
             this.pictureBox12.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox12.TabIndex = 9;
             this.pictureBox12.TabStop = false;
@@ -183,9 +191,10 @@
             // 
             this.pictureBox9.BackColor = System.Drawing.SystemColors.ControlDark;
             this.pictureBox9.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.pictureBox9.Location = new System.Drawing.Point(493, 462);
+            this.pictureBox9.Location = new System.Drawing.Point(657, 569);
+            this.pictureBox9.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBox9.Name = "pictureBox9";
-            this.pictureBox9.Size = new System.Drawing.Size(178, 165);
+            this.pictureBox9.Size = new System.Drawing.Size(236, 202);
             this.pictureBox9.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox9.TabIndex = 8;
             this.pictureBox9.TabStop = false;
@@ -194,9 +203,10 @@
             // 
             this.pictureBox8.BackColor = System.Drawing.SystemColors.ControlDark;
             this.pictureBox8.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.pictureBox8.Location = new System.Drawing.Point(267, 462);
+            this.pictureBox8.Location = new System.Drawing.Point(356, 569);
+            this.pictureBox8.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBox8.Name = "pictureBox8";
-            this.pictureBox8.Size = new System.Drawing.Size(178, 165);
+            this.pictureBox8.Size = new System.Drawing.Size(236, 202);
             this.pictureBox8.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox8.TabIndex = 7;
             this.pictureBox8.TabStop = false;
@@ -205,9 +215,10 @@
             // 
             this.pictureBox7.BackColor = System.Drawing.SystemColors.ControlDark;
             this.pictureBox7.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.pictureBox7.Location = new System.Drawing.Point(35, 462);
+            this.pictureBox7.Location = new System.Drawing.Point(47, 569);
+            this.pictureBox7.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBox7.Name = "pictureBox7";
-            this.pictureBox7.Size = new System.Drawing.Size(178, 165);
+            this.pictureBox7.Size = new System.Drawing.Size(236, 202);
             this.pictureBox7.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox7.TabIndex = 6;
             this.pictureBox7.TabStop = false;
@@ -216,9 +227,10 @@
             // 
             this.pictureBox6.BackColor = System.Drawing.SystemColors.ControlDark;
             this.pictureBox6.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.pictureBox6.Location = new System.Drawing.Point(493, 254);
+            this.pictureBox6.Location = new System.Drawing.Point(657, 313);
+            this.pictureBox6.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBox6.Name = "pictureBox6";
-            this.pictureBox6.Size = new System.Drawing.Size(178, 165);
+            this.pictureBox6.Size = new System.Drawing.Size(236, 202);
             this.pictureBox6.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox6.TabIndex = 5;
             this.pictureBox6.TabStop = false;
@@ -227,9 +239,10 @@
             // 
             this.pictureBox5.BackColor = System.Drawing.SystemColors.ControlDark;
             this.pictureBox5.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.pictureBox5.Location = new System.Drawing.Point(267, 254);
+            this.pictureBox5.Location = new System.Drawing.Point(356, 313);
+            this.pictureBox5.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBox5.Name = "pictureBox5";
-            this.pictureBox5.Size = new System.Drawing.Size(178, 165);
+            this.pictureBox5.Size = new System.Drawing.Size(236, 202);
             this.pictureBox5.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox5.TabIndex = 4;
             this.pictureBox5.TabStop = false;
@@ -238,9 +251,10 @@
             // 
             this.pictureBox4.BackColor = System.Drawing.SystemColors.ControlDark;
             this.pictureBox4.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.pictureBox4.Location = new System.Drawing.Point(35, 254);
+            this.pictureBox4.Location = new System.Drawing.Point(47, 313);
+            this.pictureBox4.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBox4.Name = "pictureBox4";
-            this.pictureBox4.Size = new System.Drawing.Size(178, 165);
+            this.pictureBox4.Size = new System.Drawing.Size(236, 202);
             this.pictureBox4.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox4.TabIndex = 3;
             this.pictureBox4.TabStop = false;
@@ -249,9 +263,10 @@
             // 
             this.pictureBox3.BackColor = System.Drawing.SystemColors.ControlDark;
             this.pictureBox3.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.pictureBox3.Location = new System.Drawing.Point(493, 43);
+            this.pictureBox3.Location = new System.Drawing.Point(657, 53);
+            this.pictureBox3.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBox3.Name = "pictureBox3";
-            this.pictureBox3.Size = new System.Drawing.Size(178, 165);
+            this.pictureBox3.Size = new System.Drawing.Size(236, 202);
             this.pictureBox3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox3.TabIndex = 2;
             this.pictureBox3.TabStop = false;
@@ -260,9 +275,10 @@
             // 
             this.pictureBox2.BackColor = System.Drawing.SystemColors.ControlDark;
             this.pictureBox2.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.pictureBox2.Location = new System.Drawing.Point(267, 43);
+            this.pictureBox2.Location = new System.Drawing.Point(356, 53);
+            this.pictureBox2.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(178, 165);
+            this.pictureBox2.Size = new System.Drawing.Size(236, 202);
             this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox2.TabIndex = 1;
             this.pictureBox2.TabStop = false;
@@ -271,9 +287,10 @@
             // 
             this.pictureBox1.BackColor = System.Drawing.SystemColors.ControlDark;
             this.pictureBox1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.pictureBox1.Location = new System.Drawing.Point(35, 43);
+            this.pictureBox1.Location = new System.Drawing.Point(47, 53);
+            this.pictureBox1.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(178, 165);
+            this.pictureBox1.Size = new System.Drawing.Size(236, 202);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
@@ -304,9 +321,11 @@
             this.gbControl.Controls.Add(this.label3);
             this.gbControl.Controls.Add(this.label1);
             this.gbControl.Controls.Add(this.panel1);
-            this.gbControl.Location = new System.Drawing.Point(983, 1);
+            this.gbControl.Location = new System.Drawing.Point(1311, 1);
+            this.gbControl.Margin = new System.Windows.Forms.Padding(4);
             this.gbControl.Name = "gbControl";
-            this.gbControl.Size = new System.Drawing.Size(306, 767);
+            this.gbControl.Padding = new System.Windows.Forms.Padding(4);
+            this.gbControl.Size = new System.Drawing.Size(408, 944);
             this.gbControl.TabIndex = 5;
             this.gbControl.TabStop = false;
             this.gbControl.Enter += new System.EventHandler(this.gbControl_Enter);
@@ -314,9 +333,10 @@
             // cbImageOnly
             // 
             this.cbImageOnly.AutoSize = true;
-            this.cbImageOnly.Location = new System.Drawing.Point(176, 53);
+            this.cbImageOnly.Location = new System.Drawing.Point(235, 65);
+            this.cbImageOnly.Margin = new System.Windows.Forms.Padding(4);
             this.cbImageOnly.Name = "cbImageOnly";
-            this.cbImageOnly.Size = new System.Drawing.Size(86, 17);
+            this.cbImageOnly.Size = new System.Drawing.Size(100, 21);
             this.cbImageOnly.TabIndex = 27;
             this.cbImageOnly.Text = "仅显示图像";
             this.cbImageOnly.UseVisualStyleBackColor = true;
@@ -325,18 +345,20 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(12, 53);
+            this.label5.Location = new System.Drawing.Point(16, 65);
+            this.label5.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(43, 13);
+            this.label5.Size = new System.Drawing.Size(50, 17);
             this.label5.TabIndex = 26;
             this.label5.Text = "文件：";
             // 
             // cbIncludeSubDir
             // 
             this.cbIncludeSubDir.AutoSize = true;
-            this.cbIncludeSubDir.Location = new System.Drawing.Point(55, 53);
+            this.cbIncludeSubDir.Location = new System.Drawing.Point(73, 65);
+            this.cbIncludeSubDir.Margin = new System.Windows.Forms.Padding(4);
             this.cbIncludeSubDir.Name = "cbIncludeSubDir";
-            this.cbIncludeSubDir.Size = new System.Drawing.Size(86, 17);
+            this.cbIncludeSubDir.Size = new System.Drawing.Size(100, 21);
             this.cbIncludeSubDir.TabIndex = 25;
             this.cbIncludeSubDir.Text = "包含子目录";
             this.cbIncludeSubDir.UseVisualStyleBackColor = true;
@@ -345,9 +367,10 @@
             // rb3x4
             // 
             this.rb3x4.AutoSize = true;
-            this.rb3x4.Location = new System.Drawing.Point(242, 163);
+            this.rb3x4.Location = new System.Drawing.Point(323, 201);
+            this.rb3x4.Margin = new System.Windows.Forms.Padding(4);
             this.rb3x4.Name = "rb3x4";
-            this.rb3x4.Size = new System.Drawing.Size(50, 17);
+            this.rb3x4.Size = new System.Drawing.Size(62, 21);
             this.rb3x4.TabIndex = 21;
             this.rb3x4.Text = "3 X 4";
             this.rb3x4.UseVisualStyleBackColor = true;
@@ -356,9 +379,10 @@
             // rb2x4
             // 
             this.rb2x4.AutoSize = true;
-            this.rb2x4.Location = new System.Drawing.Point(242, 139);
+            this.rb2x4.Location = new System.Drawing.Point(323, 171);
+            this.rb2x4.Margin = new System.Windows.Forms.Padding(4);
             this.rb2x4.Name = "rb2x4";
-            this.rb2x4.Size = new System.Drawing.Size(50, 17);
+            this.rb2x4.Size = new System.Drawing.Size(62, 21);
             this.rb2x4.TabIndex = 20;
             this.rb2x4.Text = "2 X 4";
             this.rb2x4.UseVisualStyleBackColor = true;
@@ -367,9 +391,10 @@
             // rb1x4
             // 
             this.rb1x4.AutoSize = true;
-            this.rb1x4.Location = new System.Drawing.Point(242, 115);
+            this.rb1x4.Location = new System.Drawing.Point(323, 142);
+            this.rb1x4.Margin = new System.Windows.Forms.Padding(4);
             this.rb1x4.Name = "rb1x4";
-            this.rb1x4.Size = new System.Drawing.Size(50, 17);
+            this.rb1x4.Size = new System.Drawing.Size(62, 21);
             this.rb1x4.TabIndex = 19;
             this.rb1x4.Text = "1 X 4";
             this.rb1x4.UseVisualStyleBackColor = true;
@@ -378,18 +403,20 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(12, 187);
+            this.label2.Location = new System.Drawing.Point(16, 230);
+            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(43, 13);
+            this.label2.Size = new System.Drawing.Size(50, 17);
             this.label2.TabIndex = 18;
             this.label2.Text = "选中：";
             // 
             // rb3x3
             // 
             this.rb3x3.AutoSize = true;
-            this.rb3x3.Location = new System.Drawing.Point(176, 163);
+            this.rb3x3.Location = new System.Drawing.Point(235, 201);
+            this.rb3x3.Margin = new System.Windows.Forms.Padding(4);
             this.rb3x3.Name = "rb3x3";
-            this.rb3x3.Size = new System.Drawing.Size(50, 17);
+            this.rb3x3.Size = new System.Drawing.Size(62, 21);
             this.rb3x3.TabIndex = 17;
             this.rb3x3.Text = "3 X 3";
             this.rb3x3.UseVisualStyleBackColor = true;
@@ -398,9 +425,10 @@
             // rb3x2
             // 
             this.rb3x2.AutoSize = true;
-            this.rb3x2.Location = new System.Drawing.Point(114, 163);
+            this.rb3x2.Location = new System.Drawing.Point(152, 201);
+            this.rb3x2.Margin = new System.Windows.Forms.Padding(4);
             this.rb3x2.Name = "rb3x2";
-            this.rb3x2.Size = new System.Drawing.Size(50, 17);
+            this.rb3x2.Size = new System.Drawing.Size(62, 21);
             this.rb3x2.TabIndex = 16;
             this.rb3x2.Text = "3 X 2";
             this.rb3x2.UseVisualStyleBackColor = true;
@@ -409,9 +437,10 @@
             // rb3x1
             // 
             this.rb3x1.AutoSize = true;
-            this.rb3x1.Location = new System.Drawing.Point(55, 163);
+            this.rb3x1.Location = new System.Drawing.Point(73, 201);
+            this.rb3x1.Margin = new System.Windows.Forms.Padding(4);
             this.rb3x1.Name = "rb3x1";
-            this.rb3x1.Size = new System.Drawing.Size(50, 17);
+            this.rb3x1.Size = new System.Drawing.Size(62, 21);
             this.rb3x1.TabIndex = 15;
             this.rb3x1.Text = "3 X 1";
             this.rb3x1.UseVisualStyleBackColor = true;
@@ -421,9 +450,10 @@
             // 
             this.rb2x3.AutoSize = true;
             this.rb2x3.Checked = true;
-            this.rb2x3.Location = new System.Drawing.Point(176, 139);
+            this.rb2x3.Location = new System.Drawing.Point(235, 171);
+            this.rb2x3.Margin = new System.Windows.Forms.Padding(4);
             this.rb2x3.Name = "rb2x3";
-            this.rb2x3.Size = new System.Drawing.Size(50, 17);
+            this.rb2x3.Size = new System.Drawing.Size(62, 21);
             this.rb2x3.TabIndex = 14;
             this.rb2x3.TabStop = true;
             this.rb2x3.Text = "2 X 3";
@@ -433,9 +463,10 @@
             // rb2x2
             // 
             this.rb2x2.AutoSize = true;
-            this.rb2x2.Location = new System.Drawing.Point(114, 139);
+            this.rb2x2.Location = new System.Drawing.Point(152, 171);
+            this.rb2x2.Margin = new System.Windows.Forms.Padding(4);
             this.rb2x2.Name = "rb2x2";
-            this.rb2x2.Size = new System.Drawing.Size(50, 17);
+            this.rb2x2.Size = new System.Drawing.Size(62, 21);
             this.rb2x2.TabIndex = 13;
             this.rb2x2.Text = "2 X 2";
             this.rb2x2.UseVisualStyleBackColor = true;
@@ -444,9 +475,10 @@
             // rb2x1
             // 
             this.rb2x1.AutoSize = true;
-            this.rb2x1.Location = new System.Drawing.Point(55, 139);
+            this.rb2x1.Location = new System.Drawing.Point(73, 171);
+            this.rb2x1.Margin = new System.Windows.Forms.Padding(4);
             this.rb2x1.Name = "rb2x1";
-            this.rb2x1.Size = new System.Drawing.Size(50, 17);
+            this.rb2x1.Size = new System.Drawing.Size(62, 21);
             this.rb2x1.TabIndex = 12;
             this.rb2x1.Text = "2 X 1";
             this.rb2x1.UseVisualStyleBackColor = true;
@@ -455,9 +487,10 @@
             // rb1x3
             // 
             this.rb1x3.AutoSize = true;
-            this.rb1x3.Location = new System.Drawing.Point(176, 115);
+            this.rb1x3.Location = new System.Drawing.Point(235, 142);
+            this.rb1x3.Margin = new System.Windows.Forms.Padding(4);
             this.rb1x3.Name = "rb1x3";
-            this.rb1x3.Size = new System.Drawing.Size(50, 17);
+            this.rb1x3.Size = new System.Drawing.Size(62, 21);
             this.rb1x3.TabIndex = 11;
             this.rb1x3.Text = "1 X 3";
             this.rb1x3.UseVisualStyleBackColor = true;
@@ -466,9 +499,10 @@
             // rb1x2
             // 
             this.rb1x2.AutoSize = true;
-            this.rb1x2.Location = new System.Drawing.Point(114, 115);
+            this.rb1x2.Location = new System.Drawing.Point(152, 142);
+            this.rb1x2.Margin = new System.Windows.Forms.Padding(4);
             this.rb1x2.Name = "rb1x2";
-            this.rb1x2.Size = new System.Drawing.Size(50, 17);
+            this.rb1x2.Size = new System.Drawing.Size(62, 21);
             this.rb1x2.TabIndex = 10;
             this.rb1x2.Text = "1 X 2";
             this.rb1x2.UseVisualStyleBackColor = true;
@@ -477,9 +511,10 @@
             // rb1x1
             // 
             this.rb1x1.AutoSize = true;
-            this.rb1x1.Location = new System.Drawing.Point(55, 115);
+            this.rb1x1.Location = new System.Drawing.Point(73, 142);
+            this.rb1x1.Margin = new System.Windows.Forms.Padding(4);
             this.rb1x1.Name = "rb1x1";
-            this.rb1x1.Size = new System.Drawing.Size(50, 17);
+            this.rb1x1.Size = new System.Drawing.Size(62, 21);
             this.rb1x1.TabIndex = 9;
             this.rb1x1.Text = "1 X 1";
             this.rb1x1.UseVisualStyleBackColor = true;
@@ -492,25 +527,29 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lbSelectedFile.Font = new System.Drawing.Font("SimSun", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lbSelectedFile.FormattingEnabled = true;
-            this.lbSelectedFile.ItemHeight = 14;
-            this.lbSelectedFile.Location = new System.Drawing.Point(14, 209);
+            this.lbSelectedFile.ItemHeight = 17;
+            this.lbSelectedFile.Location = new System.Drawing.Point(19, 257);
+            this.lbSelectedFile.Margin = new System.Windows.Forms.Padding(4);
             this.lbSelectedFile.Name = "lbSelectedFile";
-            this.lbSelectedFile.Size = new System.Drawing.Size(281, 550);
+            this.lbSelectedFile.ScrollAlwaysVisible = true;
+            this.lbSelectedFile.Size = new System.Drawing.Size(373, 667);
             this.lbSelectedFile.TabIndex = 7;
             this.lbSelectedFile.SelectedIndexChanged += new System.EventHandler(this.lbSelectedFile_SelectedIndexChanged);
             // 
             // tbDir
             // 
-            this.tbDir.Location = new System.Drawing.Point(55, 16);
+            this.tbDir.Location = new System.Drawing.Point(73, 20);
+            this.tbDir.Margin = new System.Windows.Forms.Padding(4);
             this.tbDir.Name = "tbDir";
-            this.tbDir.Size = new System.Drawing.Size(198, 20);
+            this.tbDir.Size = new System.Drawing.Size(263, 22);
             this.tbDir.TabIndex = 6;
             // 
             // btBrowse
             // 
-            this.btBrowse.Location = new System.Drawing.Point(260, 14);
+            this.btBrowse.Location = new System.Drawing.Point(347, 17);
+            this.btBrowse.Margin = new System.Windows.Forms.Padding(4);
             this.btBrowse.Name = "btBrowse";
-            this.btBrowse.Size = new System.Drawing.Size(35, 25);
+            this.btBrowse.Size = new System.Drawing.Size(47, 31);
             this.btBrowse.TabIndex = 5;
             this.btBrowse.Text = "...";
             this.btBrowse.UseVisualStyleBackColor = true;
@@ -519,48 +558,67 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(12, 19);
+            this.label3.Location = new System.Drawing.Point(16, 23);
+            this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(43, 13);
+            this.label3.Size = new System.Drawing.Size(50, 17);
             this.label3.TabIndex = 4;
             this.label3.Text = "目录：";
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.rbOrderBySize);
             this.panel1.Controls.Add(this.label4);
             this.panel1.Controls.Add(this.rbOrderByTime);
             this.panel1.Controls.Add(this.rbOrderByName);
-            this.panel1.Location = new System.Drawing.Point(6, 81);
+            this.panel1.Location = new System.Drawing.Point(8, 100);
+            this.panel1.Margin = new System.Windows.Forms.Padding(4);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(289, 28);
+            this.panel1.Size = new System.Drawing.Size(385, 34);
             this.panel1.TabIndex = 25;
+            // 
+            // rbOrderBySize
+            // 
+            this.rbOrderBySize.AutoSize = true;
+            this.rbOrderBySize.Location = new System.Drawing.Point(315, 4);
+            this.rbOrderBySize.Margin = new System.Windows.Forms.Padding(4);
+            this.rbOrderBySize.Name = "rbOrderBySize";
+            this.rbOrderBySize.Size = new System.Drawing.Size(57, 21);
+            this.rbOrderBySize.TabIndex = 25;
+            this.rbOrderBySize.Text = "大小";
+            this.rbOrderBySize.UseVisualStyleBackColor = true;
+            this.rbOrderBySize.CheckedChanged += new System.EventHandler(this.rbOrderBySize_CheckedChanged);
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(5, 4);
+            this.label4.Location = new System.Drawing.Point(7, 5);
+            this.label4.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(43, 13);
+            this.label4.Size = new System.Drawing.Size(50, 17);
             this.label4.TabIndex = 22;
             this.label4.Text = "排序：";
             // 
             // rbOrderByTime
             // 
             this.rbOrderByTime.AutoSize = true;
-            this.rbOrderByTime.Location = new System.Drawing.Point(170, 3);
+            this.rbOrderByTime.Location = new System.Drawing.Point(187, 3);
+            this.rbOrderByTime.Margin = new System.Windows.Forms.Padding(4);
             this.rbOrderByTime.Name = "rbOrderByTime";
-            this.rbOrderByTime.Size = new System.Drawing.Size(49, 17);
+            this.rbOrderByTime.Size = new System.Drawing.Size(57, 21);
             this.rbOrderByTime.TabIndex = 24;
             this.rbOrderByTime.Text = "时间";
             this.rbOrderByTime.UseVisualStyleBackColor = true;
+            this.rbOrderByTime.CheckedChanged += new System.EventHandler(this.rbOrderByTime_CheckedChanged);
             // 
             // rbOrderByName
             // 
             this.rbOrderByName.AutoSize = true;
             this.rbOrderByName.Checked = true;
-            this.rbOrderByName.Location = new System.Drawing.Point(49, 3);
+            this.rbOrderByName.Location = new System.Drawing.Point(65, 4);
+            this.rbOrderByName.Margin = new System.Windows.Forms.Padding(4);
             this.rbOrderByName.Name = "rbOrderByName";
-            this.rbOrderByName.Size = new System.Drawing.Size(61, 17);
+            this.rbOrderByName.Size = new System.Drawing.Size(71, 21);
             this.rbOrderByName.TabIndex = 23;
             this.rbOrderByName.TabStop = true;
             this.rbOrderByName.Text = "文件名";
@@ -570,9 +628,10 @@
             // btExport
             // 
             this.btExport.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btExport.Location = new System.Drawing.Point(826, 22);
+            this.btExport.Location = new System.Drawing.Point(1101, 27);
+            this.btExport.Margin = new System.Windows.Forms.Padding(4);
             this.btExport.Name = "btExport";
-            this.btExport.Size = new System.Drawing.Size(98, 33);
+            this.btExport.Size = new System.Drawing.Size(131, 41);
             this.btExport.TabIndex = 8;
             this.btExport.Text = "导出";
             this.btExport.UseVisualStyleBackColor = true;
@@ -590,18 +649,21 @@
             this.gbAction.Controls.Add(this.btPrevPage);
             this.gbAction.Controls.Add(this.btFirstPage);
             this.gbAction.Controls.Add(this.btExport);
-            this.gbAction.Location = new System.Drawing.Point(7, 700);
+            this.gbAction.Location = new System.Drawing.Point(9, 862);
+            this.gbAction.Margin = new System.Windows.Forms.Padding(4);
             this.gbAction.Name = "gbAction";
-            this.gbAction.Size = new System.Drawing.Size(930, 68);
+            this.gbAction.Padding = new System.Windows.Forms.Padding(4);
+            this.gbAction.Size = new System.Drawing.Size(1240, 84);
             this.gbAction.TabIndex = 6;
             this.gbAction.TabStop = false;
             // 
             // btDelete
             // 
             this.btDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btDelete.Location = new System.Drawing.Point(714, 22);
+            this.btDelete.Location = new System.Drawing.Point(952, 27);
+            this.btDelete.Margin = new System.Windows.Forms.Padding(4);
             this.btDelete.Name = "btDelete";
-            this.btDelete.Size = new System.Drawing.Size(98, 33);
+            this.btDelete.Size = new System.Drawing.Size(131, 41);
             this.btDelete.TabIndex = 16;
             this.btDelete.Text = "删除";
             this.btDelete.UseVisualStyleBackColor = true;
@@ -609,9 +671,10 @@
             // 
             // trackBarProgress
             // 
-            this.trackBarProgress.Location = new System.Drawing.Point(477, 14);
+            this.trackBarProgress.Location = new System.Drawing.Point(636, 17);
+            this.trackBarProgress.Margin = new System.Windows.Forms.Padding(4);
             this.trackBarProgress.Name = "trackBarProgress";
-            this.trackBarProgress.Size = new System.Drawing.Size(178, 45);
+            this.trackBarProgress.Size = new System.Drawing.Size(237, 56);
             this.trackBarProgress.TabIndex = 15;
             this.trackBarProgress.TickStyle = System.Windows.Forms.TickStyle.Both;
             this.trackBarProgress.Scroll += new System.EventHandler(this.trackBarProgress_Scroll);
@@ -619,18 +682,20 @@
             // lblProgress
             // 
             this.lblProgress.AutoSize = true;
-            this.lblProgress.Location = new System.Drawing.Point(212, 33);
+            this.lblProgress.Location = new System.Drawing.Point(283, 41);
+            this.lblProgress.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblProgress.Name = "lblProgress";
-            this.lblProgress.Size = new System.Drawing.Size(24, 13);
+            this.lblProgress.Size = new System.Drawing.Size(28, 17);
             this.lblProgress.TabIndex = 13;
             this.lblProgress.Text = "0/0";
             // 
             // btLastPage
             // 
             this.btLastPage.Enabled = false;
-            this.btLastPage.Location = new System.Drawing.Point(380, 22);
+            this.btLastPage.Location = new System.Drawing.Point(507, 27);
+            this.btLastPage.Margin = new System.Windows.Forms.Padding(4);
             this.btLastPage.Name = "btLastPage";
-            this.btLastPage.Size = new System.Drawing.Size(75, 33);
+            this.btLastPage.Size = new System.Drawing.Size(100, 41);
             this.btLastPage.TabIndex = 12;
             this.btLastPage.Text = "尾页";
             this.btLastPage.UseVisualStyleBackColor = true;
@@ -639,9 +704,10 @@
             // btNextPage
             // 
             this.btNextPage.Enabled = false;
-            this.btNextPage.Location = new System.Drawing.Point(287, 22);
+            this.btNextPage.Location = new System.Drawing.Point(383, 27);
+            this.btNextPage.Margin = new System.Windows.Forms.Padding(4);
             this.btNextPage.Name = "btNextPage";
-            this.btNextPage.Size = new System.Drawing.Size(75, 33);
+            this.btNextPage.Size = new System.Drawing.Size(100, 41);
             this.btNextPage.TabIndex = 11;
             this.btNextPage.Text = "下页";
             this.btNextPage.UseVisualStyleBackColor = true;
@@ -650,9 +716,10 @@
             // btPrevPage
             // 
             this.btPrevPage.Enabled = false;
-            this.btPrevPage.Location = new System.Drawing.Point(97, 22);
+            this.btPrevPage.Location = new System.Drawing.Point(129, 27);
+            this.btPrevPage.Margin = new System.Windows.Forms.Padding(4);
             this.btPrevPage.Name = "btPrevPage";
-            this.btPrevPage.Size = new System.Drawing.Size(75, 33);
+            this.btPrevPage.Size = new System.Drawing.Size(100, 41);
             this.btPrevPage.TabIndex = 10;
             this.btPrevPage.Text = "上页";
             this.btPrevPage.UseVisualStyleBackColor = true;
@@ -661,9 +728,10 @@
             // btFirstPage
             // 
             this.btFirstPage.Enabled = false;
-            this.btFirstPage.Location = new System.Drawing.Point(7, 22);
+            this.btFirstPage.Location = new System.Drawing.Point(9, 27);
+            this.btFirstPage.Margin = new System.Windows.Forms.Padding(4);
             this.btFirstPage.Name = "btFirstPage";
-            this.btFirstPage.Size = new System.Drawing.Size(75, 33);
+            this.btFirstPage.Size = new System.Drawing.Size(100, 41);
             this.btFirstPage.TabIndex = 9;
             this.btFirstPage.Text = "首页";
             this.btFirstPage.UseVisualStyleBackColor = true;
@@ -673,15 +741,16 @@
             // 
             this.toolTip1.BackColor = System.Drawing.Color.Red;
             // 
-            // Form1
+            // ImageVieweForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1296, 777);
+            this.ClientSize = new System.Drawing.Size(1728, 956);
             this.Controls.Add(this.gbAction);
             this.Controls.Add(this.gbControl);
             this.Controls.Add(this.gbImage);
-            this.Name = "Form1";
+            this.Margin = new System.Windows.Forms.Padding(4);
+            this.Name = "ImageVieweForm";
             this.Text = "Image Viewer";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form1_FormClosed);
@@ -764,6 +833,7 @@
         private System.Windows.Forms.Button btDelete;
         private System.Windows.Forms.CheckBox cbImageOnly;
         private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.RadioButton rbOrderBySize;
     }
 }
 
