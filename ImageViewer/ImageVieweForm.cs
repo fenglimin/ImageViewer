@@ -386,9 +386,9 @@ namespace ImageViewer
             }
             
             if (_orderBy == 0)
-                _fileList = _fileList.OrderBy(x => x.LastWriteTime).ToArray();
-            else if (_orderBy == 1)
                 _fileList = _fileList.OrderBy(x => x.FullName).ToArray();
+            else if (_orderBy == 1)
+                _fileList = _fileList.OrderBy(x => x.LastWriteTime).ToArray();
             else
                 _fileList = _fileList.OrderBy(x => x.Length).ToArray();
 
