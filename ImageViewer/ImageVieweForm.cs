@@ -100,7 +100,10 @@ namespace ImageViewer
                 _config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
             }
 
-            
+            if (!_workingDir.EndsWith("\\"))
+            {
+                _workingDir += "\\";
+            }
 
             LoadConfig();
             _formLoading = false;
@@ -124,6 +127,11 @@ namespace ImageViewer
                 {
                     MessageBox.Show("当前目录与配置文件中的目录不一致，将默认加载配置文件中的目录！", "信息", MessageBoxButtons.OK);
                 }
+            }
+
+            if (!dir.EndsWith("\\"))
+            {
+                dir += "\\";
             }
 
             tbDir.Text = dir;
@@ -193,7 +201,7 @@ namespace ImageViewer
                 return;
 
             _openedImageByCmd = string.Empty;
-            tbDir.Text = dialog.SelectedPath;
+            tbDir.Text = dialog.SelectedPath + "\\";
             ShowImage(tbDir.Text, 0);
         }
 
@@ -345,7 +353,7 @@ namespace ImageViewer
                 if (pictureBox.BackColor == System.Drawing.SystemColors.ControlDark)
                 {
                     lbSelectedFile.Items.Add(fileName);
-                    pictureBox.BackColor = Color.Red;
+                    pictureBox.BackColor = Color.MediumBlue;
                 }
                 else
                 {
@@ -828,7 +836,10 @@ namespace ImageViewer
         private void SetSelectedCount()
         {
             lblSelectedCount.Text = string.Format("选中 {0} 个图像", lbSelectedFile.Items.Count);
-            btClearAll.Enabled = lbSelectedFile.Items.Count > 0;
+            var enabled = lbSelectedFile.Items.Count > 0;
+            btClearAll.Enabled = enabled;
+            btExport.Enabled = enabled;
+            btDelete.Enabled = enabled;
         }
     }
 }

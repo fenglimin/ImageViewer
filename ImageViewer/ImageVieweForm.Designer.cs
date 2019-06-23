@@ -633,6 +633,7 @@
             // btExport
             // 
             this.btExport.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btExport.Enabled = false;
             this.btExport.Location = new System.Drawing.Point(1101, 27);
             this.btExport.Margin = new System.Windows.Forms.Padding(4);
             this.btExport.Name = "btExport";
@@ -665,6 +666,7 @@
             // btDelete
             // 
             this.btDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btDelete.Enabled = false;
             this.btDelete.Location = new System.Drawing.Point(952, 27);
             this.btDelete.Margin = new System.Windows.Forms.Padding(4);
             this.btDelete.Name = "btDelete";
