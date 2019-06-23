@@ -137,6 +137,7 @@ namespace ImageViewer
             rbOrderByName.Checked = _orderBy == 0;
             rbOrderByTime.Checked = _orderBy == 1;
             rbOrderBySize.Checked = _orderBy == 2;
+            rbOrderByExt.Checked = _orderBy == 3;
 
 
             cbIncludeSubDir.Checked = LoadSetting("IncludeSubDir", "0") == "1";
@@ -366,6 +367,10 @@ namespace ImageViewer
                     }
                 }
             }
+            else if (mouseE.Button == MouseButtons.Middle)
+            {
+                Close();
+            }
         }
 
         private void ShowImage(string imageDir, int currentIndex)
@@ -375,6 +380,7 @@ namespace ImageViewer
 
             var root = new DirectoryInfo(imageDir);
             _fileList = root.GetFiles("*.*", cbIncludeSubDir.Checked? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly);
+            _fileList = _fileList.Where(file => file.Name != "ImageViewer.xml").ToArray();
 
             if (!_fileList.Any())
                 return;
@@ -389,8 +395,10 @@ namespace ImageViewer
                 _fileList = _fileList.OrderBy(x => x.FullName).ToArray();
             else if (_orderBy == 1)
                 _fileList = _fileList.OrderBy(x => x.LastWriteTime).ToArray();
-            else
+            else if (_orderBy == 2)
                 _fileList = _fileList.OrderBy(x => x.Length).ToArray();
+            else
+                _fileList = _fileList.OrderBy(x => x.Extension).ToArray();
 
             if (string.IsNullOrEmpty(_openedImageByCmd))
                 _imageIndex = currentIndex - _row*_column;
@@ -654,24 +662,7 @@ namespace ImageViewer
             //if (MessageBox.Show("需要保存图像浏览记录吗？", "确认", MessageBoxButtons.YesNo) == DialogResult.No)
             //    return;
 
-            SaveSetting("ImageDir", tbDir.Text);
-            SaveSetting("OrderBy", rbOrderByName.Checked? "0" : rbOrderByTime.Checked? "1" : "2");
-            if (_imageIndex < 0)
-                _imageIndex = 0;
-            SaveSetting("ImageIndex", _imageIndex.ToString(CultureInfo.InvariantCulture));
-            SaveSetting("Row", _row.ToString(CultureInfo.InvariantCulture));
-            SaveSetting("Column", _column.ToString(CultureInfo.InvariantCulture));
-
-            var selectedFiles = lbSelectedFile.Items.Cast<object>().Aggregate(string.Empty, (current, item) => current + (item + ";"));
-            SaveSetting("SelectedFiles", selectedFiles);
-
-            SaveSetting("IncludeSubDir", cbIncludeSubDir.Checked ? "1" : "0");
-            SaveSetting("ImageOnly", cbImageOnly.Checked ? "1" : "0");
-
-            SaveSetting("ExportDir", _exportDir);
-            SaveSetting("DeleteAfterExport", _deleteAfterExport ? "1" : "0");
-
-            _config.Save(ConfigurationSaveMode.Minimal);
+            SaveConfig();
         }
 
         private void SaveSetting(string key, string value)
@@ -709,16 +700,30 @@ namespace ImageViewer
             if (MessageBox.Show("确定要删除这些文件吗？", "确认", MessageBoxButtons.YesNo) == DialogResult.No)
                 return;
 
-            var selectedFiles = new object[lbSelectedFile.Items.Count];
+            var count = lbSelectedFile.Items.Count;
+            var selectedFiles = new object[count];
             lbSelectedFile.Items.CopyTo(selectedFiles, 0);
 
             foreach (var file in selectedFiles)
             {
-                File.Delete(file as string);
-                lbSelectedFile.Items.Remove(file);
+                try
+                {
+                    File.Delete(file as string);
+                    lbSelectedFile.Items.Remove(file);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                    count--;
+                }
             }
 
-            ShowImage(tbDir.Text, 0);
+            _imageIndex -= count;
+            if (_imageIndex < 0)
+            {
+                _imageIndex = 0;
+            }
+            ShowImage(tbDir.Text, _imageIndex);
         }
 
         private void cbImageOnly_CheckedChanged(object sender, EventArgs e)
@@ -757,6 +762,15 @@ namespace ImageViewer
             }
         }
 
+        private void rbOrderByExt_CheckedChanged(object sender, EventArgs e)
+        {
+            if (!_formLoading)
+            {
+                _orderBy = 3;
+                ShowImage(tbDir.Text, 0);
+            }
+        }
+
         private void WriteShellRunReg()
         {
             var root = Registry.ClassesRoot;
@@ -768,5 +782,26 @@ namespace ImageViewer
             command.SetValue("", "\"" + Application.ExecutablePath + "\" \"%1\"");
         }
 
+        private void SaveConfig()
+        {
+            SaveSetting("ImageDir", tbDir.Text);
+            SaveSetting("OrderBy", rbOrderByName.Checked ? "0" : rbOrderByTime.Checked ? "1" : "2");
+            if (_imageIndex < 0)
+                _imageIndex = 0;
+            SaveSetting("ImageIndex", _imageIndex.ToString(CultureInfo.InvariantCulture));
+            SaveSetting("Row", _row.ToString(CultureInfo.InvariantCulture));
+            SaveSetting("Column", _column.ToString(CultureInfo.InvariantCulture));
+
+            var selectedFiles = lbSelectedFile.Items.Cast<object>().Aggregate(string.Empty, (current, item) => current + (item + ";"));
+            SaveSetting("SelectedFiles", selectedFiles);
+
+            SaveSetting("IncludeSubDir", cbIncludeSubDir.Checked ? "1" : "0");
+            SaveSetting("ImageOnly", cbImageOnly.Checked ? "1" : "0");
+
+            SaveSetting("ExportDir", _exportDir);
+            SaveSetting("DeleteAfterExport", _deleteAfterExport ? "1" : "0");
+
+            _config.Save(ConfigurationSaveMode.Minimal);
+        }
     }
 }

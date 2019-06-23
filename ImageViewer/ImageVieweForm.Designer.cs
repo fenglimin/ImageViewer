@@ -80,6 +80,7 @@
             this.btPrevPage = new System.Windows.Forms.Button();
             this.btFirstPage = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.rbOrderByExt = new System.Windows.Forms.RadioButton();
             this.gbImage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxDetail)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox10)).BeginInit();
@@ -527,6 +528,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lbSelectedFile.Font = new System.Drawing.Font("SimSun", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lbSelectedFile.FormattingEnabled = true;
+            this.lbSelectedFile.HorizontalScrollbar = true;
             this.lbSelectedFile.ItemHeight = 17;
             this.lbSelectedFile.Location = new System.Drawing.Point(19, 257);
             this.lbSelectedFile.Margin = new System.Windows.Forms.Padding(4);
@@ -567,6 +569,7 @@
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.rbOrderByExt);
             this.panel1.Controls.Add(this.rbOrderBySize);
             this.panel1.Controls.Add(this.label4);
             this.panel1.Controls.Add(this.rbOrderByTime);
@@ -580,7 +583,7 @@
             // rbOrderBySize
             // 
             this.rbOrderBySize.AutoSize = true;
-            this.rbOrderBySize.Location = new System.Drawing.Point(315, 4);
+            this.rbOrderBySize.Location = new System.Drawing.Point(227, 4);
             this.rbOrderBySize.Margin = new System.Windows.Forms.Padding(4);
             this.rbOrderBySize.Name = "rbOrderBySize";
             this.rbOrderBySize.Size = new System.Drawing.Size(57, 21);
@@ -602,7 +605,7 @@
             // rbOrderByTime
             // 
             this.rbOrderByTime.AutoSize = true;
-            this.rbOrderByTime.Location = new System.Drawing.Point(187, 3);
+            this.rbOrderByTime.Location = new System.Drawing.Point(144, 4);
             this.rbOrderByTime.Margin = new System.Windows.Forms.Padding(4);
             this.rbOrderByTime.Name = "rbOrderByTime";
             this.rbOrderByTime.Size = new System.Drawing.Size(57, 21);
@@ -618,10 +621,10 @@
             this.rbOrderByName.Location = new System.Drawing.Point(65, 4);
             this.rbOrderByName.Margin = new System.Windows.Forms.Padding(4);
             this.rbOrderByName.Name = "rbOrderByName";
-            this.rbOrderByName.Size = new System.Drawing.Size(71, 21);
+            this.rbOrderByName.Size = new System.Drawing.Size(57, 21);
             this.rbOrderByName.TabIndex = 23;
             this.rbOrderByName.TabStop = true;
-            this.rbOrderByName.Text = "文件名";
+            this.rbOrderByName.Text = "名称";
             this.rbOrderByName.UseVisualStyleBackColor = true;
             this.rbOrderByName.CheckedChanged += new System.EventHandler(this.rbOrderByName_CheckedChanged);
             // 
@@ -741,6 +744,18 @@
             // 
             this.toolTip1.BackColor = System.Drawing.Color.Red;
             // 
+            // rbOrderByExt
+            // 
+            this.rbOrderByExt.AutoSize = true;
+            this.rbOrderByExt.Location = new System.Drawing.Point(315, 4);
+            this.rbOrderByExt.Margin = new System.Windows.Forms.Padding(4);
+            this.rbOrderByExt.Name = "rbOrderByExt";
+            this.rbOrderByExt.Size = new System.Drawing.Size(57, 21);
+            this.rbOrderByExt.TabIndex = 26;
+            this.rbOrderByExt.Text = "类型";
+            this.rbOrderByExt.UseVisualStyleBackColor = true;
+            this.rbOrderByExt.CheckedChanged += new System.EventHandler(this.rbOrderByExt_CheckedChanged);
+            // 
             // ImageVieweForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -834,6 +849,7 @@
         private System.Windows.Forms.CheckBox cbImageOnly;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.RadioButton rbOrderBySize;
+        private System.Windows.Forms.RadioButton rbOrderByExt;
     }
 }
 
