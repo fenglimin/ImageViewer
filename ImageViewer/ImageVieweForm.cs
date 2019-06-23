@@ -108,6 +108,7 @@ namespace ImageViewer
             ShowImage(tbDir.Text, _imageIndex);
 
             Text = "Image Viewer - " + tbDir.Text;
+            SetSelectedCount();
         }
 
         private void LoadConfig()
@@ -353,6 +354,7 @@ namespace ImageViewer
                 }
 
                 btExport.Enabled = btDelete.Enabled = lbSelectedFile.Items.Count > 0;
+                SetSelectedCount();
             }
             else if (mouseE.Button == System.Windows.Forms.MouseButtons.Right)
             {
@@ -812,6 +814,21 @@ namespace ImageViewer
             SaveSetting("DeleteAfterExport", _deleteAfterExport ? "1" : "0");
 
             _config.Save(ConfigurationSaveMode.Minimal);
+        }
+
+        private void btClearAll_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("确定要全部清除吗？", "确认", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            {
+                lbSelectedFile.Items.Clear();
+                ShowImage(tbDir.Text, _imageIndex);
+            }
+        }
+
+        private void SetSelectedCount()
+        {
+            lblSelectedCount.Text = string.Format("选中 {0} 个图像", lbSelectedFile.Items.Count);
+            btClearAll.Enabled = lbSelectedFile.Items.Count > 0;
         }
     }
 }

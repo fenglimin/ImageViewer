@@ -51,7 +51,7 @@
             this.rb3x4 = new System.Windows.Forms.RadioButton();
             this.rb2x4 = new System.Windows.Forms.RadioButton();
             this.rb1x4 = new System.Windows.Forms.RadioButton();
-            this.label2 = new System.Windows.Forms.Label();
+            this.lblSelectedCount = new System.Windows.Forms.Label();
             this.rb3x3 = new System.Windows.Forms.RadioButton();
             this.rb3x2 = new System.Windows.Forms.RadioButton();
             this.rb3x1 = new System.Windows.Forms.RadioButton();
@@ -81,6 +81,7 @@
             this.btFirstPage = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.rbOrderByExt = new System.Windows.Forms.RadioButton();
+            this.btClearAll = new System.Windows.Forms.Button();
             this.gbImage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxDetail)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox10)).BeginInit();
@@ -300,13 +301,14 @@
             // 
             this.gbControl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.gbControl.Controls.Add(this.btClearAll);
             this.gbControl.Controls.Add(this.cbImageOnly);
             this.gbControl.Controls.Add(this.label5);
             this.gbControl.Controls.Add(this.cbIncludeSubDir);
             this.gbControl.Controls.Add(this.rb3x4);
             this.gbControl.Controls.Add(this.rb2x4);
             this.gbControl.Controls.Add(this.rb1x4);
-            this.gbControl.Controls.Add(this.label2);
+            this.gbControl.Controls.Add(this.lblSelectedCount);
             this.gbControl.Controls.Add(this.rb3x3);
             this.gbControl.Controls.Add(this.rb3x2);
             this.gbControl.Controls.Add(this.rb3x1);
@@ -401,15 +403,15 @@
             this.rb1x4.UseVisualStyleBackColor = true;
             this.rb1x4.CheckedChanged += new System.EventHandler(this.rb1x4_CheckedChanged);
             // 
-            // label2
+            // lblSelectedCount
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(16, 230);
-            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(50, 17);
-            this.label2.TabIndex = 18;
-            this.label2.Text = "选中：";
+            this.lblSelectedCount.AutoSize = true;
+            this.lblSelectedCount.Location = new System.Drawing.Point(16, 244);
+            this.lblSelectedCount.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblSelectedCount.Name = "lblSelectedCount";
+            this.lblSelectedCount.Size = new System.Drawing.Size(50, 17);
+            this.lblSelectedCount.TabIndex = 18;
+            this.lblSelectedCount.Text = "选中：";
             // 
             // rb3x3
             // 
@@ -530,11 +532,11 @@
             this.lbSelectedFile.FormattingEnabled = true;
             this.lbSelectedFile.HorizontalScrollbar = true;
             this.lbSelectedFile.ItemHeight = 17;
-            this.lbSelectedFile.Location = new System.Drawing.Point(19, 257);
+            this.lbSelectedFile.Location = new System.Drawing.Point(19, 274);
             this.lbSelectedFile.Margin = new System.Windows.Forms.Padding(4);
             this.lbSelectedFile.Name = "lbSelectedFile";
             this.lbSelectedFile.ScrollAlwaysVisible = true;
-            this.lbSelectedFile.Size = new System.Drawing.Size(373, 667);
+            this.lbSelectedFile.Size = new System.Drawing.Size(373, 650);
             this.lbSelectedFile.TabIndex = 7;
             this.lbSelectedFile.SelectedIndexChanged += new System.EventHandler(this.lbSelectedFile_SelectedIndexChanged);
             // 
@@ -756,6 +758,18 @@
             this.rbOrderByExt.UseVisualStyleBackColor = true;
             this.rbOrderByExt.CheckedChanged += new System.EventHandler(this.rbOrderByExt_CheckedChanged);
             // 
+            // btClearAll
+            // 
+            this.btClearAll.Enabled = false;
+            this.btClearAll.Location = new System.Drawing.Point(280, 235);
+            this.btClearAll.Margin = new System.Windows.Forms.Padding(4);
+            this.btClearAll.Name = "btClearAll";
+            this.btClearAll.Size = new System.Drawing.Size(112, 31);
+            this.btClearAll.TabIndex = 28;
+            this.btClearAll.Text = "全部清除";
+            this.btClearAll.UseVisualStyleBackColor = true;
+            this.btClearAll.Click += new System.EventHandler(this.btClearAll_Click);
+            // 
             // ImageVieweForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -824,7 +838,7 @@
         private System.Windows.Forms.RadioButton rb2x3;
         private System.Windows.Forms.RadioButton rb2x2;
         private System.Windows.Forms.RadioButton rb2x1;
-        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label lblSelectedCount;
         private System.Windows.Forms.GroupBox gbAction;
         private System.Windows.Forms.Label lblProgress;
         private System.Windows.Forms.Button btLastPage;
@@ -850,6 +864,7 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.RadioButton rbOrderBySize;
         private System.Windows.Forms.RadioButton rbOrderByExt;
+        private System.Windows.Forms.Button btClearAll;
     }
 }
 
