@@ -106,6 +106,8 @@ namespace ImageViewer
             _formLoading = false;
             AdjustSize(true);
             ShowImage(tbDir.Text, _imageIndex);
+
+            Text = "Image Viewer - " + tbDir.Text;
         }
 
         private void LoadConfig()
@@ -338,14 +340,15 @@ namespace ImageViewer
             var mouseE = e as MouseEventArgs;
             if (mouseE.Button == System.Windows.Forms.MouseButtons.Left)
             {
+                var fileName = pictureBox.ImageLocation.Substring(tbDir.Text.Length);
                 if (pictureBox.BackColor == System.Drawing.SystemColors.ControlDark)
                 {
-                    lbSelectedFile.Items.Add(pictureBox.ImageLocation);
+                    lbSelectedFile.Items.Add(fileName);
                     pictureBox.BackColor = Color.Red;
                 }
                 else
                 {
-                    lbSelectedFile.Items.Remove(pictureBox.ImageLocation);
+                    lbSelectedFile.Items.Remove(fileName);
                     pictureBox.BackColor = System.Drawing.SystemColors.ControlDark;
                 }
 
@@ -494,9 +497,16 @@ namespace ImageViewer
 
         private void SetSelectState(PictureBox pictureBox)
         {
-            if (lbSelectedFile.Items.Contains(pictureBox.ImageLocation))
+            var fileName = pictureBox.ImageLocation;
+            if (!string.IsNullOrEmpty(fileName))
             {
-                pictureBox.BackColor = Color.Red;
+                fileName = fileName.Substring(tbDir.Text.Length);
+            }
+
+            if (lbSelectedFile.Items.Contains(fileName))
+            {
+                pictureBox.BackColor = (lbSelectedFile.SelectedItem != null && lbSelectedFile.SelectedItem.ToString() == fileName)? 
+                    Color.Red : Color.MediumBlue;
             }
             else
             {
@@ -539,7 +549,7 @@ namespace ImageViewer
 
         private void lbSelectedFile_SelectedIndexChanged(object sender, EventArgs e)
         {
-            EnableShowImage(lbSelectedFile.Text);
+            EnableShowImage(tbDir.Text + lbSelectedFile.Text);
         }
 
         private int FindImageIndex(string imageFullName)
