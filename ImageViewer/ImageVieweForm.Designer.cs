@@ -144,13 +144,14 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.pictureBoxDetail.BackColor = System.Drawing.SystemColors.ControlDark;
             this.pictureBoxDetail.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.pictureBoxDetail.Location = new System.Drawing.Point(507, 780);
+            this.pictureBoxDetail.Location = new System.Drawing.Point(748, 789);
             this.pictureBoxDetail.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBoxDetail.Name = "pictureBoxDetail";
             this.pictureBoxDetail.Size = new System.Drawing.Size(236, 46);
             this.pictureBoxDetail.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBoxDetail.TabIndex = 12;
             this.pictureBoxDetail.TabStop = false;
+            this.pictureBoxDetail.Visible = false;
             this.pictureBoxDetail.Click += new System.EventHandler(this.pictureBoxDetail_Click);
             // 
             // pictureBox10
@@ -164,6 +165,7 @@
             this.pictureBox10.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox10.TabIndex = 11;
             this.pictureBox10.TabStop = false;
+            this.pictureBox10.Visible = false;
             // 
             // pictureBox11
             // 
@@ -176,6 +178,7 @@
             this.pictureBox11.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox11.TabIndex = 10;
             this.pictureBox11.TabStop = false;
+            this.pictureBox11.Visible = false;
             // 
             // pictureBox12
             // 
@@ -188,6 +191,7 @@
             this.pictureBox12.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox12.TabIndex = 9;
             this.pictureBox12.TabStop = false;
+            this.pictureBox12.Visible = false;
             // 
             // pictureBox9
             // 
@@ -200,6 +204,7 @@
             this.pictureBox9.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox9.TabIndex = 8;
             this.pictureBox9.TabStop = false;
+            this.pictureBox9.Visible = false;
             // 
             // pictureBox8
             // 
@@ -212,6 +217,7 @@
             this.pictureBox8.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox8.TabIndex = 7;
             this.pictureBox8.TabStop = false;
+            this.pictureBox8.Visible = false;
             // 
             // pictureBox7
             // 
@@ -224,6 +230,7 @@
             this.pictureBox7.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox7.TabIndex = 6;
             this.pictureBox7.TabStop = false;
+            this.pictureBox7.Visible = false;
             // 
             // pictureBox6
             // 
@@ -236,6 +243,7 @@
             this.pictureBox6.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox6.TabIndex = 5;
             this.pictureBox6.TabStop = false;
+            this.pictureBox6.Visible = false;
             // 
             // pictureBox5
             // 
@@ -248,6 +256,7 @@
             this.pictureBox5.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox5.TabIndex = 4;
             this.pictureBox5.TabStop = false;
+            this.pictureBox5.Visible = false;
             // 
             // pictureBox4
             // 
@@ -260,6 +269,7 @@
             this.pictureBox4.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox4.TabIndex = 3;
             this.pictureBox4.TabStop = false;
+            this.pictureBox4.Visible = false;
             // 
             // pictureBox3
             // 
@@ -272,6 +282,7 @@
             this.pictureBox3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox3.TabIndex = 2;
             this.pictureBox3.TabStop = false;
+            this.pictureBox3.Visible = false;
             // 
             // pictureBox2
             // 
@@ -284,6 +295,7 @@
             this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox2.TabIndex = 1;
             this.pictureBox2.TabStop = false;
+            this.pictureBox2.Visible = false;
             // 
             // pictureBox1
             // 
@@ -296,6 +308,7 @@
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
+            this.pictureBox1.Visible = false;
             // 
             // gbControl
             // 
@@ -542,6 +555,7 @@
             // 
             // tbDir
             // 
+            this.tbDir.Enabled = false;
             this.tbDir.Location = new System.Drawing.Point(73, 20);
             this.tbDir.Margin = new System.Windows.Forms.Padding(4);
             this.tbDir.Name = "tbDir";
@@ -550,6 +564,7 @@
             // 
             // btBrowse
             // 
+            this.btBrowse.Enabled = false;
             this.btBrowse.Location = new System.Drawing.Point(347, 17);
             this.btBrowse.Margin = new System.Windows.Forms.Padding(4);
             this.btBrowse.Name = "btBrowse";

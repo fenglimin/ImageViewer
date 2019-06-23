@@ -98,6 +98,7 @@ namespace ImageViewer
             {
                 _workingDir = Application.StartupPath;
                 _config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
+                btBrowse.Enabled = true;
             }
 
             if (!_workingDir.EndsWith("\\"))
@@ -105,17 +106,34 @@ namespace ImageViewer
                 _workingDir += "\\";
             }
 
-            LoadConfig();
+            var ret = LoadConfig();
             _formLoading = false;
             AdjustSize(true);
+            SetPictureBoxVisible(true);
+
+
             ShowImage(tbDir.Text, _imageIndex);
 
             Text = "Image Viewer - " + tbDir.Text;
             SetSelectedCount();
+
+            if (!ret && !btBrowse.Enabled)
+            {
+                MessageBox.Show("当前目录与配置文件中的目录不一致，默认加载配置文件中的目录 - " + tbDir.Text, "信息", MessageBoxButtons.OK);
+            }
         }
 
-        private void LoadConfig()
+        private void SetPictureBoxVisible(bool visible)
         {
+            for (var i = 0; i < _row * _column; i++)
+            {
+                _pictureList[i].Visible = visible;
+            }
+        }
+
+        private bool LoadConfig()
+        {
+            var ret = true;
             var dir = LoadSetting("ImageDir", _workingDir);
             if (!Directory.Exists(dir))
             {
@@ -125,7 +143,7 @@ namespace ImageViewer
             {
                 if (dir != _workingDir)
                 {
-                    MessageBox.Show("当前目录与配置文件中的目录不一致，将默认加载配置文件中的目录！", "信息", MessageBoxButtons.OK);
+                    ret = false;
                 }
             }
 
@@ -166,6 +184,8 @@ namespace ImageViewer
             }
 
             _layoutList[(_row - 1) * 4 + _column - 1].Checked = true;
+
+            return ret;
         }
 
         private string LoadSetting(string key, string defaultValue)
@@ -195,11 +215,20 @@ namespace ImageViewer
 
         private void btBrowse_Click(object sender, EventArgs e)
         {
+            if (lbSelectedFile.Items.Count > 0)
+            {
+                if (MessageBox.Show("更改图像目录将清除已选文件，继续吗？", "确认", MessageBoxButtons.YesNo) == DialogResult.No)
+                {
+                    return;
+                }
+            }
+
             var dialog = new FolderBrowserDialog { Description = "请选择文件路径", SelectedPath = tbDir.Text };
 
             if (dialog.ShowDialog() != DialogResult.OK)
                 return;
 
+            lbSelectedFile.Items.Clear();
             _openedImageByCmd = string.Empty;
             tbDir.Text = dialog.SelectedPath + "\\";
             ShowImage(tbDir.Text, 0);
@@ -379,6 +408,8 @@ namespace ImageViewer
                         break;
                     }
                 }
+
+                SetPictureBoxVisible(false);
             }
             else if (mouseE.Button == MouseButtons.Middle)
             {
@@ -386,17 +417,35 @@ namespace ImageViewer
             }
         }
 
-        private void ShowImage(string imageDir, int currentIndex)
+        private bool ShowImage(string imageDir, int currentIndex)
         {
             if (!Directory.Exists(imageDir))
-                return;
+                return false;
 
             var root = new DirectoryInfo(imageDir);
-            _fileList = root.GetFiles("*.*", cbIncludeSubDir.Checked? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly);
+            try
+            {
+                _fileList = root.GetFiles("*.*",
+                    cbIncludeSubDir.Checked ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                return false;
+            }
+
+
+            for (var i = 0; i < _row * _column; i++)
+            {
+                _pictureList[i].ImageLocation = string.Empty;
+                SetImageTipInfo(_pictureList[i]);
+                SetSelectState(_pictureList[i]);
+            }
+
             _fileList = _fileList.Where(file => file.Name != "ImageViewer.xml").ToArray();
 
             if (!_fileList.Any())
-                return;
+                return false;
 
             if (cbImageOnly.Checked)
             {
@@ -420,6 +469,8 @@ namespace ImageViewer
 
             ShowNextImageOnScreen();
             UpdateTrackBar();
+
+            return true;
         }
 
         private void UpdateTrackBar()
@@ -704,6 +755,8 @@ namespace ImageViewer
                 pictureBox.ImageLocation = string.Empty;
                 gbAction.Enabled = true;
                 gbControl.Enabled = true;
+
+                SetPictureBoxVisible(true);
             }
         }
 
