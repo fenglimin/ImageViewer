@@ -781,12 +781,16 @@ namespace ImageViewer
             {
                 try
                 {
-                    File.Delete(file as string);
+                    File.Delete(tbDir.Text + (file as string));
                     lbSelectedFile.Items.Remove(file);
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.Message);
+                    if (MessageBox.Show("删除文件失败！ - " + ex.Message + "\r\n要继续吗？", "错误", MessageBoxButtons.YesNo) == DialogResult.No)
+                    {
+                        return;
+                    }
+
                     count--;
                 }
             }
