@@ -105,6 +105,8 @@
             this.Controls.Add(this.tbDir);
             this.Controls.Add(this.btBrowse);
             this.Controls.Add(this.label3);
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "ExportForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "导出";

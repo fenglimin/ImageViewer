@@ -19,6 +19,88 @@ namespace ImageViewer
 {
     public partial class ImageVieweForm : Form
     {
+        public class ImageTag
+        {
+            public int Id { get; set; }
+            public string Name { get; set; }
+
+            public ImageTag(string value)
+            {
+                var valueList = value.Split(';');
+                if (valueList.Length == 1)
+                {
+                    Id = 0;
+                    Name = value;
+                }
+                else
+                {
+                    Id = Convert.ToInt32(valueList[0]);
+                    Name = valueList[1];
+                }
+            }
+
+            public override string ToString()
+            {
+                return Id + ";" + Name;
+            }
+        }
+
+        public class TaggedImage
+        {
+            public string ImageName { get; set; }
+            public string TagList { get; set; }
+
+            public TaggedImage(string value)
+            {
+                var valueList = value.Split(':');
+                if (valueList.Length == 1)
+                {
+                    ImageName = value;
+                    TagList = "";
+                }
+                else
+                {
+                    ImageName = valueList[0];
+                    TagList = valueList[1];
+                }
+            }
+
+            public override string ToString()
+            {
+                return string.IsNullOrEmpty(TagList)? string.Empty : ImageName + ":" + TagList;
+            }
+
+            public void AddTag(int tagId)
+            {
+                var findString = ";" + TagList;
+                if (!findString.Contains(";" + tagId + ";"))
+                {
+                    TagList += tagId + ";";
+                }
+            }
+
+            public void DeleteTag(int tagId)
+            {
+                var findString = ";" + TagList;
+                if (findString.Contains(";" + tagId + ";"))
+                {
+                    TagList = TagList.Replace(tagId + ";", "");
+                }
+            }
+
+            public bool HasTag(string tagIdListString)
+            {
+                var findString = ";" + TagList;
+                if (tagIdListString[tagIdListString.Length - 1] == ';')
+                {
+                    tagIdListString = tagIdListString.Substring(0, tagIdListString.Length - 1);
+                }
+                
+                var tagIdList = tagIdListString.Split(';');
+                return tagIdList.All(tagId => findString.Contains(";" + tagId + ";"));
+            }
+        }
+
         private int _row = 2, _column = 3;
         private PictureBox[]  _pictureList = new PictureBox[12];
         private RadioButton[] _layoutList = new RadioButton[12];
@@ -33,6 +115,9 @@ namespace ImageViewer
         private string _workingDir = string.Empty;
         private Configuration _config = null;
         private string _openedImageByCmd = string.Empty;
+        private List<ImageTag> _tagList = new List<ImageTag>();
+        private List<TaggedImage> _taggedImageList = new List<TaggedImage>();
+        private List<int> _lastSelectedIndices = new List<int>();
 
         public ImageVieweForm()
         {
@@ -185,6 +270,29 @@ namespace ImageViewer
 
             _layoutList[(_row - 1) * 4 + _column - 1].Checked = true;
 
+            var tagStringList = LoadSetting("TagList", "");
+            if (!string.IsNullOrEmpty(tagStringList))
+            {
+                var tagList = tagStringList.Split(':');
+                for (var i = 0; i < tagList.Length-1; i++)
+                {
+                    var tag = new ImageTag(tagList[i]);
+                    _tagList.Add(tag);
+                    lbTagList.Items.Add(tag.Name);
+                }
+            }
+
+            var taggedImageListString = LoadSetting("TaggedImageList", "");
+            if (!string.IsNullOrEmpty(taggedImageListString))
+            {
+                var taggedImageList = taggedImageListString.Split('*');
+                for (var i = 0; i < taggedImageList.Length - 1; i++)
+                {
+                    var taggedImage = new TaggedImage(taggedImageList[i]);
+                    _taggedImageList.Add(taggedImage);
+                }
+            }
+
             return ret;
         }
 
@@ -324,6 +432,7 @@ namespace ImageViewer
             int count = _row * _column;
             _imageIndex = (_imageIndex / count) * count;
             int index = 0;
+            List<string> commonTagList = null;
             for ( var i = 0; i < _row; i++ )
             {
                 for ( var j = 0; j < _column; j ++)
@@ -337,13 +446,17 @@ namespace ImageViewer
                     _pictureList[index].Size = pictureSize;
                     _pictureList[index].Visible = true;
 
-                    if (_fileList != null && _imageIndex + index < _fileList.Length && _imageIndex + index > 0)
+                    if (_fileList != null && _imageIndex + index < _fileList.Length && _imageIndex + index >= 0)
                     {
                         if (_pictureList[index].ImageLocation != _fileList[_imageIndex + index].FullName)
                         {
                             _pictureList[index].ImageLocation = _fileList[_imageIndex + index].FullName;
                             SetImageTipInfo(_pictureList[index]);
-                            SetSelectState(_pictureList[index]);
+                            var tagList = SetSelectState(_pictureList[index]);
+                            if (tagList != null)
+                            {
+                                commonTagList = GetCommonTagList(commonTagList, tagList);
+                            }
                         }
                     }
                 }
@@ -356,7 +469,7 @@ namespace ImageViewer
                 SetImageTipInfo(_pictureList[index]);
             }
 
-            SetShowStatus();
+            SetShowStatus(commonTagList);
             UpdateTrackBar();
 
         }
@@ -392,6 +505,18 @@ namespace ImageViewer
 
                 btExport.Enabled = btDelete.Enabled = lbSelectedFile.Items.Count > 0;
                 SetSelectedCount();
+
+                var imageCount = _row * _column;
+                List<string> commonTagList = null;
+                for (var i = 0; i < imageCount; i++)
+                {
+                    var tagList = SetSelectState(_pictureList[i]);
+                    if (tagList != null)
+                    {
+                        commonTagList = GetCommonTagList(commonTagList, tagList);
+                    }
+                }
+                SetShowStatus(commonTagList);
             }
             else if (mouseE.Button == System.Windows.Forms.MouseButtons.Right)
             {
@@ -417,7 +542,14 @@ namespace ImageViewer
             }
         }
 
-        private bool ShowImage(string imageDir, int currentIndex)
+        private List<string> GetAllTagIdList()
+        {
+            var allTagIdList = new List<string>();
+            _tagList.ForEach(tag => allTagIdList.Add(tag.Id.ToString()));
+            return allTagIdList;
+        }
+
+        private bool ShowImage(string imageDir, int currentIndex, bool queryByTag = false)
         {
             if (!Directory.Exists(imageDir))
                 return false;
@@ -467,6 +599,28 @@ namespace ImageViewer
             else
                 _imageIndex = FindImageIndex(_openedImageByCmd)-2;
 
+            if (queryByTag)
+            {
+                var tagIdListString = GetSelectTagIdListString();
+                if (!string.IsNullOrEmpty(tagIdListString))
+                {
+                    var targetFileList = new List<string>();
+                    foreach (var taggedImage in _taggedImageList)
+                    {
+                        if (taggedImage.HasTag(tagIdListString))
+                        {
+                            targetFileList.Add(taggedImage.ImageName);
+                        }
+                    }
+
+                    _fileList = _fileList.Where(file =>
+                    {
+                        var fileName = file.FullName.Substring(tbDir.Text.Length);
+                        return targetFileList.FindIndex(targetfile => targetfile == fileName) != -1;
+                    }).ToArray();
+                }                
+            }
+
             ShowNextImageOnScreen();
             UpdateTrackBar();
 
@@ -494,6 +648,7 @@ namespace ImageViewer
             if (imageCount > _fileList.Length - _imageIndex)
                 imageCount = _fileList.Length - _imageIndex;
 
+            List<string> commonTagList = null;
             for (var i = 0; i < imageCount; i++)
             {
                 _pictureList[i].ImageLocation = _fileList[_imageIndex + i].FullName;
@@ -501,7 +656,11 @@ namespace ImageViewer
                 var image = _pictureList[i];
 
                 SetImageTipInfo(_pictureList[i]);
-                SetSelectState(_pictureList[i]);
+                var tagList = SetSelectState(_pictureList[i]);
+                if (tagList != null)
+                {
+                    commonTagList = GetCommonTagList(commonTagList, tagList);
+                }
             }
 
             for (var i = imageCount; i < _row * _column; i++)
@@ -511,11 +670,30 @@ namespace ImageViewer
                 SetSelectState(_pictureList[i]);
             }
 
-            SetShowStatus();
+            SetShowStatus(commonTagList);
             trackBarProgress.Value = _imageIndex / (_row * _column);
         }
 
-        private void SetShowStatus()
+        private List<string> GetCommonTagList(List<string> commonTagList, List<string> tagList)
+        {
+            if (commonTagList == null)
+            {
+                return tagList;
+            }
+
+            var newList = new List<string>();
+            for (var i = 0; i < commonTagList.Count; i++)
+            {
+                if (tagList.Contains(commonTagList[i]))
+                {
+                    newList.Add(commonTagList[i]);
+                }
+            }
+
+            return newList;
+        }
+
+        private void SetShowStatus(List<string> commonTagList)
         {
             if (_fileList == null)
                 return;
@@ -528,6 +706,27 @@ namespace ImageViewer
             lblProgress.Text = string.Format("{0} / {1}", _imageIndex / (_row * _column) + 1, (_fileList.Length - 1) / (_row * _column) + 1);
 
             btExport.Enabled = btDelete.Enabled = lbSelectedFile.Items.Count > 0;
+
+            if (commonTagList != null &&  commonTagList.Count != 0)
+            {
+                for (var j = 0; j < lbTagList.Items.Count; j++)
+                {
+                    var tagName = lbTagList.Items[j].ToString();
+                    var tagId = _tagList.Find(tag => tag.Name == tagName).Id;
+                    var tagFound = commonTagList.FindIndex(tag => tag == tagId.ToString()) != -1;
+                    lbTagList.SetSelected(j, tagFound);
+                }
+            }
+            else
+            {
+                for (var j = 0; j < lbTagList.Items.Count; j++)
+                {
+                    lbTagList.SetSelected(j, false);
+                }
+            }
+
+            SetTagButtonStatus();
+            _lastSelectedIndices = lbTagList.SelectedIndices.Cast<int>().ToList();
         }
 
         private void ShowNextImageOnScreen()
@@ -556,7 +755,7 @@ namespace ImageViewer
             ShowOneScreen();
         }
 
-        private void SetSelectState(PictureBox pictureBox)
+        private List<string> SetSelectState(PictureBox pictureBox)
         {
             var fileName = pictureBox.ImageLocation;
             if (!string.IsNullOrEmpty(fileName))
@@ -568,11 +767,15 @@ namespace ImageViewer
             {
                 pictureBox.BackColor = (lbSelectedFile.SelectedItem != null && lbSelectedFile.SelectedItem.ToString() == fileName)? 
                     Color.Red : Color.MediumBlue;
+                var targetImage = _taggedImageList.Find(taggedImage => taggedImage.ImageName == fileName);
+                return (targetImage != null) ? targetImage.TagList.Split(';').ToList() : new List<string>();
             }
             else
             {
                 pictureBox.BackColor = System.Drawing.SystemColors.ControlDark;
             }
+
+            return null;
         }
 
         private void OnMouseWheel(object sender, System.Windows.Forms.MouseEventArgs e)
@@ -878,7 +1081,31 @@ namespace ImageViewer
             SaveSetting("ExportDir", _exportDir);
             SaveSetting("DeleteAfterExport", _deleteAfterExport ? "1" : "0");
 
+            SaveSetting("TagList", GetTagList());
+            SaveSetting("TaggedImageList", GetTaggedImageList());
+
             _config.Save(ConfigurationSaveMode.Minimal);
+        }
+
+        private string GetTagList()
+        {
+            var ret = string.Empty;
+            _tagList.ForEach(tag => ret += (tag.ToString() + ":"));
+            return ret;
+        }
+
+        private string GetTaggedImageList()
+        {
+            var ret = string.Empty;
+            _taggedImageList.ForEach(taggedImage =>
+            {
+                var value = taggedImage.ToString();
+                if (!string.IsNullOrEmpty(value))
+                {
+                    ret += (value + "*");
+                }
+            });
+            return ret;
         }
 
         private void btClearAll_Click(object sender, EventArgs e)
@@ -897,6 +1124,175 @@ namespace ImageViewer
             btClearAll.Enabled = enabled;
             btExport.Enabled = enabled;
             btDelete.Enabled = enabled;
+        }
+
+        private void btAddTag_Click(object sender, EventArgs e)
+        {
+            var tagForm = new TagFrom
+            {
+                TagName = string.Empty
+            };
+
+            tagForm.ShowDialog();
+            if (tagForm.Cancelled)
+            {
+                return;
+            }
+
+            lbTagList.Items.Add(tagForm.TagName);
+            var newTag = new ImageTag(tagForm.TagName);
+            newTag.Id = _tagList.Count == 0? 1 : _tagList.Max(tag => tag.Id) + 1;
+            _tagList.Add(newTag);
+        }
+
+        private void btDeleteTag_Click(object sender, EventArgs e)
+        {
+            // lbTagList.GetSelected()
+            var tagNameList = new List<string>();
+            foreach (var selectedItem in lbTagList.SelectedItems)
+            {
+                tagNameList.Add(selectedItem.ToString());
+            }
+
+            foreach (var tagName in tagNameList)
+            {
+                foreach (var taggedImage in _taggedImageList)
+                {
+                    DeleteTagFromImage(taggedImage.ImageName, tagName);
+                }
+
+                lbTagList.Items.Remove(tagName);
+                _tagList.RemoveAt(_tagList.FindIndex(tag => tag.Name == tagName));
+            }
+        }
+
+        private void btUpdateTag_Click(object sender, EventArgs e)
+        {
+            var oldTagName = lbTagList.SelectedItem.ToString();
+            var tagForm = new TagFrom
+            {
+                TagName = oldTagName
+            };
+
+            tagForm.ShowDialog();
+            if (tagForm.Cancelled)
+            {
+                return;
+            }
+
+            lbTagList.Items[lbTagList.SelectedIndex] = tagForm.TagName;
+            var index = _tagList.FindIndex(tag => tag.Name == oldTagName);
+            _tagList[index].Name = tagForm.TagName;
+        }
+
+        private void btQueryByTag_Click(object sender, EventArgs e)
+        {
+            ShowImage(tbDir.Text, 0, true);
+        }
+
+        private void AddTagToImage(string imageName, string tagName)
+        {
+            var tagId = _tagList.Find(tag => tag.Name == tagName).Id;
+            var targetImage = _taggedImageList.Find(taggedImage => taggedImage.ImageName == imageName);
+            if (targetImage == null)
+            {
+                targetImage = new TaggedImage(imageName);
+                _taggedImageList.Add(targetImage);
+            }
+            targetImage.AddTag(tagId);
+        }
+
+        private void DeleteTagFromImage(string imageName, string tagName)
+        {
+            var tagId = _tagList.Find(tag => tag.Name == tagName).Id;
+            var targetImage = _taggedImageList.Find(taggedImage => taggedImage.ImageName == imageName);
+            targetImage.DeleteTag(tagId);
+        }
+
+        private string GetSelectedTagName()
+        {
+            var currentSelectedIndices = lbTagList.SelectedIndices.Cast<int>().ToList();
+            for (var i = 0; i < _lastSelectedIndices.Count; i++)
+            {
+                if (_lastSelectedIndices[i] != currentSelectedIndices[i])
+                {
+                    return lbTagList.Items[currentSelectedIndices[i]].ToString();
+                }
+            }
+
+            return lbTagList.Items[currentSelectedIndices[_lastSelectedIndices.Count]].ToString();
+        }
+
+        private void SetTagButtonStatus()
+        {
+            var selectCount = lbTagList.SelectedItems.Count;
+            btDeleteTag.Enabled = selectCount != 0;
+            btUpdateTag.Enabled = selectCount == 1;
+        }
+
+        private string GetUnselectedTagName()
+        {
+            var currentSelectedIndices = lbTagList.SelectedIndices.Cast<int>().ToList();
+            for (var i = 0; i < currentSelectedIndices.Count; i++)
+            {
+                if (_lastSelectedIndices[i] != currentSelectedIndices[i])
+                {
+                    return lbTagList.Items[_lastSelectedIndices[i]].ToString();
+                }
+            }
+
+            return lbTagList.Items[_lastSelectedIndices[currentSelectedIndices.Count]].ToString();
+        }
+
+        private void lbTagList_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void lbTagList_Click(object sender, EventArgs e)
+        {
+            SetTagButtonStatus();
+            var currentSelectedIndices = lbTagList.SelectedIndices.Cast<int>().ToList();
+
+            if (currentSelectedIndices.Count == _lastSelectedIndices.Count)
+            {
+                return;
+            }
+            var addNewTag = currentSelectedIndices.Count > _lastSelectedIndices.Count;
+
+            for (var i = 0; i < _row * _column; i++)
+            {
+                if (_pictureList[i].BackColor != SystemColors.ControlDark)
+                {
+                    var imageName = _pictureList[i].ImageLocation.Substring(tbDir.Text.Length);
+                    if (addNewTag)
+                    {
+                        AddTagToImage(imageName, GetSelectedTagName());
+                    }
+                    else
+                    {
+                        DeleteTagFromImage(imageName, GetUnselectedTagName());
+                    }
+                }
+            }
+            _lastSelectedIndices = currentSelectedIndices;
+        }
+
+        private string GetSelectTagIdListString()
+        {
+            var ret = string.Empty;
+
+            for (var i = 0; i < lbTagList.Items.Count; i++)
+            {
+                if (lbTagList.GetSelected(i))
+                {
+                    var tagName = lbTagList.Items[i].ToString();
+                    var id = _tagList.Find(tag => tag.Name == tagName).Id;
+                    ret += ( id + ";");
+                }
+            }
+
+            return ret;
         }
     }
 }
