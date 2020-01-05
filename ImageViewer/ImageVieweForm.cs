@@ -97,7 +97,7 @@ namespace ImageViewer
                 }
                 
                 var tagIdList = tagIdListString.Split(';');
-                return tagIdList.All(tagId => findString.Contains(";" + tagId + ";"));
+                return tagIdList.Any(tagId => findString.Contains(";" + tagId + ";"));
             }
         }
 
@@ -118,6 +118,7 @@ namespace ImageViewer
         private List<ImageTag> _tagList = new List<ImageTag>();
         private List<TaggedImage> _taggedImageList = new List<TaggedImage>();
         private List<int> _lastSelectedIndices = new List<int>();
+        private bool _ignoreCheck;
 
         public ImageVieweForm()
         {
@@ -494,13 +495,16 @@ namespace ImageViewer
                 var fileName = pictureBox.ImageLocation.Substring(tbDir.Text.Length);
                 if (pictureBox.BackColor == System.Drawing.SystemColors.ControlDark)
                 {
-                    lbSelectedFile.Items.Add(fileName);
+                    if (!lbSelectedFile.Items.Contains(fileName))
+                    {
+                        lbSelectedFile.Items.Add(fileName);
+                    }
                     pictureBox.BackColor = Color.MediumBlue;
                 }
                 else
                 {
                     lbSelectedFile.Items.Remove(fileName);
-                    pictureBox.BackColor = System.Drawing.SystemColors.ControlDark;
+                    pictureBox.BackColor = SystemColors.ControlDark;
                 }
 
                 btExport.Enabled = btDelete.Enabled = lbSelectedFile.Items.Count > 0;
@@ -510,10 +514,20 @@ namespace ImageViewer
                 List<string> commonTagList = null;
                 for (var i = 0; i < imageCount; i++)
                 {
-                    var tagList = SetSelectState(_pictureList[i]);
-                    if (tagList != null)
+                    if (_pictureList[i].BackColor == Color.MediumBlue)
                     {
-                        commonTagList = GetCommonTagList(commonTagList, tagList);
+                        var fileName1 = _pictureList[i].ImageLocation;
+                        if (!string.IsNullOrEmpty(fileName1))
+                        {
+                            fileName1 = fileName1.Substring(tbDir.Text.Length);
+                        }
+
+                        var targetImage = _taggedImageList.Find(taggedImage => taggedImage.ImageName == fileName1);
+                        var tagList = (targetImage != null) ? targetImage.TagList.Split(';').ToList() : new List<string>();
+                        if (tagList != null)
+                        {
+                            commonTagList = GetCommonTagList(commonTagList, tagList);
+                        }
                     }
                 }
                 SetShowStatus(commonTagList);
@@ -601,7 +615,7 @@ namespace ImageViewer
 
             if (queryByTag)
             {
-                var tagIdListString = GetSelectTagIdListString();
+                var tagIdListString = GetCheckedTagIdListString();
                 if (!string.IsNullOrEmpty(tagIdListString))
                 {
                     var targetFileList = new List<string>();
@@ -714,19 +728,21 @@ namespace ImageViewer
                     var tagName = lbTagList.Items[j].ToString();
                     var tagId = _tagList.Find(tag => tag.Name == tagName).Id;
                     var tagFound = commonTagList.FindIndex(tag => tag == tagId.ToString()) != -1;
-                    lbTagList.SetSelected(j, tagFound);
+                    SetTagCheck(j, tagFound);
+                    //lbTagList.SetItemChecked(j, tagFound);
                 }
             }
             else
             {
                 for (var j = 0; j < lbTagList.Items.Count; j++)
                 {
-                    lbTagList.SetSelected(j, false);
+                    SetTagCheck(j, false);
+                    //lbTagList.SetItemChecked(j, false);
                 }
             }
 
             SetTagButtonStatus();
-            _lastSelectedIndices = lbTagList.SelectedIndices.Cast<int>().ToList();
+            _lastSelectedIndices = GetCheckedTagIndexList();//lbTagList.SelectedIndices.Cast<int>().ToList();
         }
 
         private void ShowNextImageOnScreen()
@@ -763,10 +779,9 @@ namespace ImageViewer
                 fileName = fileName.Substring(tbDir.Text.Length);
             }
 
-            if (lbSelectedFile.Items.Contains(fileName))
+            if (lbSelectedFile.SelectedItem != null && lbSelectedFile.SelectedItem.ToString() == fileName)
             {
-                pictureBox.BackColor = (lbSelectedFile.SelectedItem != null && lbSelectedFile.SelectedItem.ToString() == fileName)? 
-                    Color.Red : Color.MediumBlue;
+                pictureBox.BackColor = Color.MediumBlue;
                 var targetImage = _taggedImageList.Find(taggedImage => taggedImage.ImageName == fileName);
                 return (targetImage != null) ? targetImage.TagList.Split(';').ToList() : new List<string>();
             }
@@ -813,7 +828,10 @@ namespace ImageViewer
 
         private void lbSelectedFile_SelectedIndexChanged(object sender, EventArgs e)
         {
-            EnableShowImage(tbDir.Text + lbSelectedFile.Text);
+            if (!string.IsNullOrEmpty(lbSelectedFile.Text))
+            {
+                EnableShowImage(tbDir.Text + lbSelectedFile.Text);
+            }
         }
 
         private int FindImageIndex(string imageFullName)
@@ -839,6 +857,11 @@ namespace ImageViewer
             {
                 _imageIndex = index;
                 ShowPrevImageOnScreen();
+            }
+            else
+            {
+                MessageBox.Show("在当前文件列表中没有这个文件", "定位文件");
+
             }
         }
 
@@ -1148,12 +1171,13 @@ namespace ImageViewer
         private void btDeleteTag_Click(object sender, EventArgs e)
         {
             // lbTagList.GetSelected()
-            var tagNameList = new List<string>();
-            foreach (var selectedItem in lbTagList.SelectedItems)
-            {
-                tagNameList.Add(selectedItem.ToString());
-            }
+            //var tagNameList = new List<string>();
+            //foreach (var selectedItem in lbTagList.SelectedItems)
+            //{
+            //    tagNameList.Add(selectedItem.ToString());
+            //}
 
+            var tagNameList = GetCheckedTagStringList();
             foreach (var tagName in tagNameList)
             {
                 foreach (var taggedImage in _taggedImageList)
@@ -1168,7 +1192,7 @@ namespace ImageViewer
 
         private void btUpdateTag_Click(object sender, EventArgs e)
         {
-            var oldTagName = lbTagList.SelectedItem.ToString();
+            var oldTagName = GetCheckedTagStringList()[0];//lbTagList.SelectedItem.ToString();
             var tagForm = new TagFrom
             {
                 TagName = oldTagName
@@ -1180,7 +1204,8 @@ namespace ImageViewer
                 return;
             }
 
-            lbTagList.Items[lbTagList.SelectedIndex] = tagForm.TagName;
+            //lbTagList.Items[lbTagList.SelectedIndex] = tagForm.TagName;
+            lbTagList.Items[GetCheckedTagIndexList()[0]] = tagForm.TagName;
             var index = _tagList.FindIndex(tag => tag.Name == oldTagName);
             _tagList[index].Name = tagForm.TagName;
         }
@@ -1211,7 +1236,7 @@ namespace ImageViewer
 
         private string GetSelectedTagName()
         {
-            var currentSelectedIndices = lbTagList.SelectedIndices.Cast<int>().ToList();
+            var currentSelectedIndices = GetCheckedTagIndexList();//lbTagList.SelectedIndices.Cast<int>().ToList();
             for (var i = 0; i < _lastSelectedIndices.Count; i++)
             {
                 if (_lastSelectedIndices[i] != currentSelectedIndices[i])
@@ -1225,14 +1250,14 @@ namespace ImageViewer
 
         private void SetTagButtonStatus()
         {
-            var selectCount = lbTagList.SelectedItems.Count;
+            var selectCount = GetCheckedTagIndexList().Count;//lbTagList.SelectedItems.Count;
             btDeleteTag.Enabled = selectCount != 0;
             btUpdateTag.Enabled = selectCount == 1;
         }
 
         private string GetUnselectedTagName()
         {
-            var currentSelectedIndices = lbTagList.SelectedIndices.Cast<int>().ToList();
+            var currentSelectedIndices = GetCheckedTagIndexList();//lbTagList.SelectedIndices.Cast<int>().ToList();
             for (var i = 0; i < currentSelectedIndices.Count; i++)
             {
                 if (_lastSelectedIndices[i] != currentSelectedIndices[i])
@@ -1244,15 +1269,59 @@ namespace ImageViewer
             return lbTagList.Items[_lastSelectedIndices[currentSelectedIndices.Count]].ToString();
         }
 
-        private void lbTagList_SelectedIndexChanged(object sender, EventArgs e)
+        private void lbTagList_ItemCheck(object sender, ItemCheckEventArgs e)
         {
-            
+            if (lbTagList.IndexFromPoint(
+                    lbTagList.PointToClient(Cursor.Position).X,
+                    lbTagList.PointToClient(Cursor.Position).Y) == -1 && !_ignoreCheck)
+            {
+                e.NewValue = e.CurrentValue;
+                return;
+            }
+
+
+        }
+
+        private string GetCheckedTagIdListString()
+        {
+            var ret = string.Empty;
+
+            for (var i = 0; i < lbTagList.Items.Count; i++)
+            {
+                if (lbTagList.GetItemChecked(i))
+                {
+                    var tagName = lbTagList.Items[i].ToString();
+                    var id = _tagList.Find(tag => tag.Name == tagName).Id;
+                    ret += (id + ";");
+                }
+            }
+
+            return ret;
+        }
+
+        private List<string> GetCheckedTagStringList()
+        {
+            var ret = new List<string>();
+            for (var i = 0; i < lbTagList.Items.Count; i++)
+            {
+                if (lbTagList.GetItemChecked(i))
+                {
+                    ret.Add(lbTagList.Items[i].ToString());
+                }
+            }
+
+            return ret;
         }
 
         private void lbTagList_Click(object sender, EventArgs e)
         {
+
+        }
+
+        private void lbTagList_SelectedIndexChanged(object sender, EventArgs e)
+        {
             SetTagButtonStatus();
-            var currentSelectedIndices = lbTagList.SelectedIndices.Cast<int>().ToList();
+            var currentSelectedIndices = lbTagList.CheckedIndices.Cast<int>().ToList(); ;//lbTagList.SelectedIndices.Cast<int>().ToList();
 
             if (currentSelectedIndices.Count == _lastSelectedIndices.Count)
             {
@@ -1278,21 +1347,25 @@ namespace ImageViewer
             _lastSelectedIndices = currentSelectedIndices;
         }
 
-        private string GetSelectTagIdListString()
+        private List<int> GetCheckedTagIndexList()
         {
-            var ret = string.Empty;
-
+            var ret = new List<int>();
             for (var i = 0; i < lbTagList.Items.Count; i++)
             {
-                if (lbTagList.GetSelected(i))
+                if (lbTagList.GetItemChecked(i))
                 {
-                    var tagName = lbTagList.Items[i].ToString();
-                    var id = _tagList.Find(tag => tag.Name == tagName).Id;
-                    ret += ( id + ";");
+                    ret.Add(i);
                 }
             }
 
             return ret;
+        }
+
+        private void SetTagCheck(int j, bool check)
+        {
+            _ignoreCheck = true;
+            lbTagList.SetItemChecked(j, check);
+            _ignoreCheck = false;
         }
     }
 }

@@ -45,7 +45,6 @@
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.gbControl = new System.Windows.Forms.GroupBox();
-            this.lbTagList = new System.Windows.Forms.ListBox();
             this.btAddTag = new System.Windows.Forms.Button();
             this.btDeleteTag = new System.Windows.Forms.Button();
             this.btUpdateTag = new System.Windows.Forms.Button();
@@ -88,6 +87,7 @@
             this.btPrevPage = new System.Windows.Forms.Button();
             this.btFirstPage = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.lbTagList = new System.Windows.Forms.CheckedListBox();
             this.gbImage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxDetail)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox10)).BeginInit();
@@ -339,18 +339,6 @@
             this.gbControl.TabIndex = 5;
             this.gbControl.TabStop = false;
             this.gbControl.Enter += new System.EventHandler(this.gbControl_Enter);
-            // 
-            // lbTagList
-            // 
-            this.lbTagList.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.lbTagList.FormattingEnabled = true;
-            this.lbTagList.Location = new System.Drawing.Point(15, 214);
-            this.lbTagList.Name = "lbTagList";
-            this.lbTagList.SelectionMode = System.Windows.Forms.SelectionMode.MultiSimple;
-            this.lbTagList.Size = new System.Drawing.Size(280, 303);
-            this.lbTagList.TabIndex = 34;
-            this.lbTagList.Click += new System.EventHandler(this.lbTagList_Click);
-            this.lbTagList.SelectedIndexChanged += new System.EventHandler(this.lbTagList_SelectedIndexChanged);
             // 
             // btAddTag
             // 
@@ -807,6 +795,18 @@
             // 
             this.toolTip1.BackColor = System.Drawing.Color.Red;
             // 
+            // lbTagList
+            // 
+            this.lbTagList.CheckOnClick = true;
+            this.lbTagList.FormattingEnabled = true;
+            this.lbTagList.Location = new System.Drawing.Point(15, 214);
+            this.lbTagList.Name = "lbTagList";
+            this.lbTagList.Size = new System.Drawing.Size(280, 304);
+            this.lbTagList.TabIndex = 34;
+            this.lbTagList.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.lbTagList_ItemCheck);
+            this.lbTagList.Click += new System.EventHandler(this.lbTagList_Click);
+            this.lbTagList.SelectedIndexChanged += new System.EventHandler(this.lbTagList_SelectedIndexChanged);
+            // 
             // ImageVieweForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -906,7 +906,7 @@
         private System.Windows.Forms.Button btUpdateTag;
         private System.Windows.Forms.Button btQueryByTag;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.ListBox lbTagList;
+        private System.Windows.Forms.CheckedListBox lbTagList;
     }
 }
 
