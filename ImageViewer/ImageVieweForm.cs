@@ -108,6 +108,7 @@ namespace ImageViewer
         private int _imageIndex = 0;
         private int _imageIndexDetail = 0;
         private bool _formLoading = true;
+        private bool _ignoreOnlyUntaggedEvent = false;
         private int _maxPicturesPerScreen = 12;
         private int _orderBy = 0;
         private string _exportDir = string.Empty;
@@ -161,6 +162,7 @@ namespace ImageViewer
                 _pictureList[index].MouseWheel += new MouseEventHandler(OnMouseWheel);
                 _pictureList[index].MouseMove += new MouseEventHandler(OnMouseMove);
                 _pictureList[index].Click += new EventHandler(OnImageClicked);
+                _pictureList[index].KeyDown += new KeyEventHandler(OnKeyDown);
             }
 
             pictureBoxDetail.MouseWheel += OnMouseWheel;
@@ -368,8 +370,7 @@ namespace ImageViewer
 
             foreach (var file in selectedFiles)
             {
-                var fileInfo = new FileInfo(file as string);
-                CopyFile(fileInfo.FullName, Path.Combine(_exportDir, fileInfo.Name));
+                CopyFile(Path.Combine(tbDir.Text, file as string), Path.Combine(_exportDir, file as string));
                 lbSelectedFile.Items.Remove(file);
             }
 
@@ -402,6 +403,19 @@ namespace ImageViewer
                 {
                     var fileInfo = new FileInfo(destFile);
                     destFile = Path.Combine(fileInfo.DirectoryName, DateTime.Now.ToBinary() + fileInfo.Name);
+                }
+                else
+                {
+                    var dirList = destFile.Split('\\');
+                    var dir = dirList[0];
+                    for (var i = 1; i < dirList.Length - 1; i++)
+                    {
+                        dir += ("\\" + dirList[i]);
+                        if (!Directory.Exists(dir))
+                        {
+                            Directory.CreateDirectory(dir);
+                        }
+                    }
                 }
                 File.Copy(srcFile, destFile);
             }
@@ -632,13 +646,33 @@ namespace ImageViewer
                         var fileName = file.FullName.Substring(tbDir.Text.Length);
                         return targetFileList.FindIndex(targetfile => targetfile == fileName) != -1;
                     }).ToArray();
-                }                
+                }
+                else
+                {
+                    FilterByUntagged();
+                }
+            }
+            else
+            {
+                FilterByUntagged();
             }
 
             ShowNextImageOnScreen();
             UpdateTrackBar();
 
             return true;
+        }
+
+        private void FilterByUntagged()
+        {
+            if (cbOnlyUntagged.Checked)
+            {
+                _fileList = _fileList.Where(file =>
+                {
+                    var imageName = file.FullName.Substring(tbDir.Text.Length);
+                    return _taggedImageList.FindIndex(taggedImage => taggedImage.ImageName == imageName) == -1;
+                }).ToArray();
+            }
         }
 
         private void UpdateTrackBar()
@@ -818,6 +852,23 @@ namespace ImageViewer
             {
                 ShowNextImageOnScreen();
             }
+        }
+
+        private void DoKeyDown(KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.A)
+            {
+                DoSelectAll();
+            }
+            else if (e.KeyCode == Keys.C)
+            {
+                DoUnselectAll();
+            }
+        }
+
+        private void OnKeyDown(object sender, KeyEventArgs e)
+        {
+            DoKeyDown(e);
         }
 
         private void OnMouseMove(object sender, System.Windows.Forms.MouseEventArgs e)
@@ -1136,6 +1187,7 @@ namespace ImageViewer
             if (MessageBox.Show("确定要全部清除吗？", "确认", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
                 lbSelectedFile.Items.Clear();
+                SetSelectedCount();
                 ShowImage(tbDir.Text, _imageIndex);
             }
         }
@@ -1212,7 +1264,10 @@ namespace ImageViewer
 
         private void btQueryByTag_Click(object sender, EventArgs e)
         {
+            _ignoreOnlyUntaggedEvent = true;
+            cbOnlyUntagged.Checked = false;
             ShowImage(tbDir.Text, 0, true);
+            _ignoreOnlyUntaggedEvent = false;
         }
 
         private void AddTagToImage(string imageName, string tagName)
@@ -1359,6 +1414,66 @@ namespace ImageViewer
             }
 
             return ret;
+        }
+
+        private void cbOnlyUntagged_CheckedChanged(object sender, EventArgs e)
+        {
+            if (_formLoading || _ignoreOnlyUntaggedEvent)
+                return;
+
+            ShowImage(tbDir.Text, 0);
+        }
+
+        private void DoSelectAll()
+        {
+            for (var i = 0; i < _row * _column; i++)
+            {
+                if (string.IsNullOrEmpty(_pictureList[i].ImageLocation))
+                {
+                    break;
+                }
+
+                _pictureList[i].BackColor = Color.MediumBlue;
+                var fileName = _pictureList[i].ImageLocation.Substring(tbDir.Text.Length);
+                if (!lbSelectedFile.Items.Contains(fileName))
+                {
+                    lbSelectedFile.Items.Add(fileName);
+                }
+            }
+
+            SetSelectedCount();
+        }
+
+        private void DoUnselectAll()
+        {
+            for (var i = 0; i < _row * _column; i++)
+            {
+                if (string.IsNullOrEmpty(_pictureList[i].ImageLocation))
+                {
+                    break;
+                }
+
+                _pictureList[i].BackColor = SystemColors.ControlDark;
+                var fileName = _pictureList[i].ImageLocation.Substring(tbDir.Text.Length);
+                lbSelectedFile.Items.Remove(fileName);
+            }
+
+            SetSelectedCount();
+        }
+
+        private void btSelectAll_Click(object sender, EventArgs e)
+        {
+            DoSelectAll();
+        }
+
+        private void btUnselectAll_Click(object sender, EventArgs e)
+        {
+            DoUnselectAll();
+        }
+
+        private void lbTagList_KeyDown(object sender, KeyEventArgs e)
+        {
+            DoKeyDown(e);
         }
 
         private void SetTagCheck(int j, bool check)

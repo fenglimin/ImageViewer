@@ -45,6 +45,8 @@
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.gbControl = new System.Windows.Forms.GroupBox();
+            this.cbOnlyUntagged = new System.Windows.Forms.CheckBox();
+            this.lbTagList = new System.Windows.Forms.CheckedListBox();
             this.btAddTag = new System.Windows.Forms.Button();
             this.btDeleteTag = new System.Windows.Forms.Button();
             this.btUpdateTag = new System.Windows.Forms.Button();
@@ -79,6 +81,8 @@
             this.rbOrderByName = new System.Windows.Forms.RadioButton();
             this.btExport = new System.Windows.Forms.Button();
             this.gbAction = new System.Windows.Forms.GroupBox();
+            this.btSelectAll = new System.Windows.Forms.Button();
+            this.btUnselectAll = new System.Windows.Forms.Button();
             this.btDelete = new System.Windows.Forms.Button();
             this.trackBarProgress = new System.Windows.Forms.TrackBar();
             this.lblProgress = new System.Windows.Forms.Label();
@@ -87,7 +91,6 @@
             this.btPrevPage = new System.Windows.Forms.Button();
             this.btFirstPage = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.lbTagList = new System.Windows.Forms.CheckedListBox();
             this.gbImage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxDetail)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox10)).BeginInit();
@@ -304,6 +307,7 @@
             // 
             this.gbControl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.gbControl.Controls.Add(this.cbOnlyUntagged);
             this.gbControl.Controls.Add(this.lbTagList);
             this.gbControl.Controls.Add(this.btAddTag);
             this.gbControl.Controls.Add(this.btDeleteTag);
@@ -339,6 +343,30 @@
             this.gbControl.TabIndex = 5;
             this.gbControl.TabStop = false;
             this.gbControl.Enter += new System.EventHandler(this.gbControl_Enter);
+            // 
+            // cbOnlyUntagged
+            // 
+            this.cbOnlyUntagged.AutoSize = true;
+            this.cbOnlyUntagged.Location = new System.Drawing.Point(203, 53);
+            this.cbOnlyUntagged.Name = "cbOnlyUntagged";
+            this.cbOnlyUntagged.Size = new System.Drawing.Size(86, 17);
+            this.cbOnlyUntagged.TabIndex = 35;
+            this.cbOnlyUntagged.Text = "仅未打标签";
+            this.cbOnlyUntagged.UseVisualStyleBackColor = true;
+            this.cbOnlyUntagged.CheckedChanged += new System.EventHandler(this.cbOnlyUntagged_CheckedChanged);
+            // 
+            // lbTagList
+            // 
+            this.lbTagList.CheckOnClick = true;
+            this.lbTagList.FormattingEnabled = true;
+            this.lbTagList.Location = new System.Drawing.Point(15, 214);
+            this.lbTagList.Name = "lbTagList";
+            this.lbTagList.Size = new System.Drawing.Size(280, 379);
+            this.lbTagList.TabIndex = 34;
+            this.lbTagList.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.lbTagList_ItemCheck);
+            this.lbTagList.Click += new System.EventHandler(this.lbTagList_Click);
+            this.lbTagList.SelectedIndexChanged += new System.EventHandler(this.lbTagList_SelectedIndexChanged);
+            this.lbTagList.KeyDown += new System.Windows.Forms.KeyEventHandler(this.lbTagList_KeyDown);
             // 
             // btAddTag
             // 
@@ -394,7 +422,7 @@
             // btClearAll
             // 
             this.btClearAll.Enabled = false;
-            this.btClearAll.Location = new System.Drawing.Point(210, 521);
+            this.btClearAll.Location = new System.Drawing.Point(210, 600);
             this.btClearAll.Name = "btClearAll";
             this.btClearAll.Size = new System.Drawing.Size(84, 25);
             this.btClearAll.TabIndex = 28;
@@ -405,11 +433,11 @@
             // cbImageOnly
             // 
             this.cbImageOnly.AutoSize = true;
-            this.cbImageOnly.Location = new System.Drawing.Point(176, 53);
+            this.cbImageOnly.Location = new System.Drawing.Point(141, 53);
             this.cbImageOnly.Name = "cbImageOnly";
-            this.cbImageOnly.Size = new System.Drawing.Size(86, 17);
+            this.cbImageOnly.Size = new System.Drawing.Size(62, 17);
             this.cbImageOnly.TabIndex = 27;
-            this.cbImageOnly.Text = "仅显示图像";
+            this.cbImageOnly.Text = "仅图像";
             this.cbImageOnly.UseVisualStyleBackColor = true;
             this.cbImageOnly.CheckedChanged += new System.EventHandler(this.cbImageOnly_CheckedChanged);
             // 
@@ -469,7 +497,7 @@
             // lblSelectedCount
             // 
             this.lblSelectedCount.AutoSize = true;
-            this.lblSelectedCount.Location = new System.Drawing.Point(12, 528);
+            this.lblSelectedCount.Location = new System.Drawing.Point(12, 607);
             this.lblSelectedCount.Name = "lblSelectedCount";
             this.lblSelectedCount.Size = new System.Drawing.Size(43, 13);
             this.lblSelectedCount.TabIndex = 18;
@@ -585,10 +613,10 @@
             this.lbSelectedFile.FormattingEnabled = true;
             this.lbSelectedFile.HorizontalScrollbar = true;
             this.lbSelectedFile.ItemHeight = 14;
-            this.lbSelectedFile.Location = new System.Drawing.Point(14, 555);
+            this.lbSelectedFile.Location = new System.Drawing.Point(14, 632);
             this.lbSelectedFile.Name = "lbSelectedFile";
             this.lbSelectedFile.ScrollAlwaysVisible = true;
-            this.lbSelectedFile.Size = new System.Drawing.Size(281, 200);
+            this.lbSelectedFile.Size = new System.Drawing.Size(281, 116);
             this.lbSelectedFile.TabIndex = 7;
             this.lbSelectedFile.SelectedIndexChanged += new System.EventHandler(this.lbSelectedFile_SelectedIndexChanged);
             // 
@@ -691,9 +719,9 @@
             // 
             this.btExport.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btExport.Enabled = false;
-            this.btExport.Location = new System.Drawing.Point(826, 22);
+            this.btExport.Location = new System.Drawing.Point(846, 22);
             this.btExport.Name = "btExport";
-            this.btExport.Size = new System.Drawing.Size(98, 33);
+            this.btExport.Size = new System.Drawing.Size(75, 33);
             this.btExport.TabIndex = 8;
             this.btExport.Text = "导出";
             this.btExport.UseVisualStyleBackColor = true;
@@ -703,6 +731,8 @@
             // 
             this.gbAction.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.gbAction.Controls.Add(this.btSelectAll);
+            this.gbAction.Controls.Add(this.btUnselectAll);
             this.gbAction.Controls.Add(this.btDelete);
             this.gbAction.Controls.Add(this.trackBarProgress);
             this.gbAction.Controls.Add(this.lblProgress);
@@ -717,13 +747,35 @@
             this.gbAction.TabIndex = 6;
             this.gbAction.TabStop = false;
             // 
+            // btSelectAll
+            // 
+            this.btSelectAll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btSelectAll.Location = new System.Drawing.Point(595, 22);
+            this.btSelectAll.Name = "btSelectAll";
+            this.btSelectAll.Size = new System.Drawing.Size(75, 33);
+            this.btSelectAll.TabIndex = 18;
+            this.btSelectAll.Text = "全选";
+            this.btSelectAll.UseVisualStyleBackColor = true;
+            this.btSelectAll.Click += new System.EventHandler(this.btSelectAll_Click);
+            // 
+            // btUnselectAll
+            // 
+            this.btUnselectAll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btUnselectAll.Location = new System.Drawing.Point(680, 22);
+            this.btUnselectAll.Name = "btUnselectAll";
+            this.btUnselectAll.Size = new System.Drawing.Size(75, 33);
+            this.btUnselectAll.TabIndex = 17;
+            this.btUnselectAll.Text = "全不选";
+            this.btUnselectAll.UseVisualStyleBackColor = true;
+            this.btUnselectAll.Click += new System.EventHandler(this.btUnselectAll_Click);
+            // 
             // btDelete
             // 
             this.btDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btDelete.Enabled = false;
-            this.btDelete.Location = new System.Drawing.Point(714, 22);
+            this.btDelete.Location = new System.Drawing.Point(761, 22);
             this.btDelete.Name = "btDelete";
-            this.btDelete.Size = new System.Drawing.Size(98, 33);
+            this.btDelete.Size = new System.Drawing.Size(75, 33);
             this.btDelete.TabIndex = 16;
             this.btDelete.Text = "删除";
             this.btDelete.UseVisualStyleBackColor = true;
@@ -731,7 +783,7 @@
             // 
             // trackBarProgress
             // 
-            this.trackBarProgress.Location = new System.Drawing.Point(477, 14);
+            this.trackBarProgress.Location = new System.Drawing.Point(423, 16);
             this.trackBarProgress.Name = "trackBarProgress";
             this.trackBarProgress.Size = new System.Drawing.Size(178, 45);
             this.trackBarProgress.TabIndex = 15;
@@ -741,7 +793,7 @@
             // lblProgress
             // 
             this.lblProgress.AutoSize = true;
-            this.lblProgress.Location = new System.Drawing.Point(212, 33);
+            this.lblProgress.Location = new System.Drawing.Point(190, 33);
             this.lblProgress.Name = "lblProgress";
             this.lblProgress.Size = new System.Drawing.Size(24, 13);
             this.lblProgress.TabIndex = 13;
@@ -750,7 +802,7 @@
             // btLastPage
             // 
             this.btLastPage.Enabled = false;
-            this.btLastPage.Location = new System.Drawing.Point(380, 22);
+            this.btLastPage.Location = new System.Drawing.Point(340, 22);
             this.btLastPage.Name = "btLastPage";
             this.btLastPage.Size = new System.Drawing.Size(75, 33);
             this.btLastPage.TabIndex = 12;
@@ -761,7 +813,7 @@
             // btNextPage
             // 
             this.btNextPage.Enabled = false;
-            this.btNextPage.Location = new System.Drawing.Point(287, 22);
+            this.btNextPage.Location = new System.Drawing.Point(252, 22);
             this.btNextPage.Name = "btNextPage";
             this.btNextPage.Size = new System.Drawing.Size(75, 33);
             this.btNextPage.TabIndex = 11;
@@ -772,7 +824,7 @@
             // btPrevPage
             // 
             this.btPrevPage.Enabled = false;
-            this.btPrevPage.Location = new System.Drawing.Point(97, 22);
+            this.btPrevPage.Location = new System.Drawing.Point(94, 22);
             this.btPrevPage.Name = "btPrevPage";
             this.btPrevPage.Size = new System.Drawing.Size(75, 33);
             this.btPrevPage.TabIndex = 10;
@@ -794,18 +846,6 @@
             // toolTip1
             // 
             this.toolTip1.BackColor = System.Drawing.Color.Red;
-            // 
-            // lbTagList
-            // 
-            this.lbTagList.CheckOnClick = true;
-            this.lbTagList.FormattingEnabled = true;
-            this.lbTagList.Location = new System.Drawing.Point(15, 214);
-            this.lbTagList.Name = "lbTagList";
-            this.lbTagList.Size = new System.Drawing.Size(280, 304);
-            this.lbTagList.TabIndex = 34;
-            this.lbTagList.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.lbTagList_ItemCheck);
-            this.lbTagList.Click += new System.EventHandler(this.lbTagList_Click);
-            this.lbTagList.SelectedIndexChanged += new System.EventHandler(this.lbTagList_SelectedIndexChanged);
             // 
             // ImageVieweForm
             // 
@@ -907,6 +947,9 @@
         private System.Windows.Forms.Button btQueryByTag;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.CheckedListBox lbTagList;
+        private System.Windows.Forms.CheckBox cbOnlyUntagged;
+        private System.Windows.Forms.Button btSelectAll;
+        private System.Windows.Forms.Button btUnselectAll;
     }
 }
 
