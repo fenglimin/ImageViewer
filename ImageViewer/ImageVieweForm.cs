@@ -866,8 +866,6 @@ namespace ImageViewer
 
         private void DoKeyDown(KeyEventArgs e)
         {
-            var aa = e.KeyCode.ToString();
-            //var key = (Keys) Enum.Parse(typeof(Keys), "A", true);
             if (e.KeyCode == Keys.A)
             {
                 if (IsAnyPictureSelected())
