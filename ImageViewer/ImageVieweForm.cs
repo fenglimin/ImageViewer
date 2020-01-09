@@ -857,11 +857,14 @@ namespace ImageViewer
         {
             if (e.KeyCode == Keys.A)
             {
-                DoSelectAll();
-            }
-            else if (e.KeyCode == Keys.C)
-            {
-                DoUnselectAll();
+                if (IsAnyPictureSelected())
+                {
+                    DoUnselectAll();
+                }
+                else
+                {
+                    DoSelectAll();
+                }
             }
         }
 
@@ -1430,6 +1433,19 @@ namespace ImageViewer
             }
 
             SetSelectedCount();
+        }
+
+        private bool IsAnyPictureSelected()
+        {
+            for (var i = 0; i < _row * _column; i++)
+            {
+                if (_pictureList[i].BackColor == Color.MediumBlue)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         private void DoUnselectAll()

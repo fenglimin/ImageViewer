@@ -358,8 +358,10 @@
             // lbTagList
             // 
             this.lbTagList.CheckOnClick = true;
+            this.lbTagList.ColumnWidth = 100;
             this.lbTagList.FormattingEnabled = true;
             this.lbTagList.Location = new System.Drawing.Point(15, 214);
+            this.lbTagList.MultiColumn = true;
             this.lbTagList.Name = "lbTagList";
             this.lbTagList.Size = new System.Drawing.Size(280, 379);
             this.lbTagList.TabIndex = 34;
