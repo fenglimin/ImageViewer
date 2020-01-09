@@ -1262,8 +1262,9 @@ namespace ImageViewer
                     DeleteTagFromImage(taggedImage.ImageName, tagName);
                 }
 
-                lbTagList.Items.Remove(tagName);
-                _tagList.RemoveAt(_tagList.FindIndex(tag => tag.Name == tagName));
+                var deleteTag = _tagList.Find(tag => tag.Name == tagName);
+                lbTagList.Items.Remove(deleteTag.DisplayString());
+                _tagList.Remove(deleteTag);
             }
         }
 

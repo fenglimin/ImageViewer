@@ -90,7 +90,7 @@
             this.tbShortcut.Location = new System.Drawing.Point(164, 35);
             this.tbShortcut.Name = "tbShortcut";
             this.tbShortcut.Size = new System.Drawing.Size(120, 20);
-            this.tbShortcut.TabIndex = 16;
+            this.tbShortcut.TabIndex = 2;
             // 
             // TagFrom
             // 
