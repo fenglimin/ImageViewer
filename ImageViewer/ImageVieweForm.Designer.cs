@@ -366,7 +366,6 @@
             this.lbTagList.Size = new System.Drawing.Size(280, 379);
             this.lbTagList.TabIndex = 34;
             this.lbTagList.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.lbTagList_ItemCheck);
-            this.lbTagList.Click += new System.EventHandler(this.lbTagList_Click);
             this.lbTagList.SelectedIndexChanged += new System.EventHandler(this.lbTagList_SelectedIndexChanged);
             // 
             // btAddTag
