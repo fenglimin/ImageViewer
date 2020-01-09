@@ -288,7 +288,13 @@ namespace ImageViewer
                 {
                     var tag = new ImageTag(tagList[i]);
                     _tagList.Add(tag);
-                    lbTagList.Items.Add(tag.DisplayString());
+                }
+
+                _tagList.Sort((tag1, tag2) => { return tag1.ShortcutKey.CompareTo(tag2.ShortcutKey); });
+
+                for (var i = 0; i < _tagList.Count - 1; i++)
+                {
+                    lbTagList.Items.Add(_tagList[i].DisplayString());
                 }
             }
 
