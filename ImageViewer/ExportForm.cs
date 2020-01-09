@@ -42,13 +42,6 @@ namespace ImageViewer
             {
                 Directory.CreateDirectory(ExportDir);
             }
-
-            Close();
-        }
-
-        private void btCancel_Click(object sender, EventArgs e)
-        {
-            Close();
         }
 
         private void ExportForm_Load(object sender, EventArgs e)

@@ -49,21 +49,23 @@
             this.tbTag.Name = "tbTag";
             this.tbTag.Size = new System.Drawing.Size(269, 20);
             this.tbTag.TabIndex = 1;
+            this.tbTag.TextChanged += new System.EventHandler(this.tbTag_TextChanged);
             // 
             // btCancel
             // 
             this.btCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btCancel.Location = new System.Drawing.Point(174, 71);
             this.btCancel.Name = "btCancel";
             this.btCancel.Size = new System.Drawing.Size(98, 28);
             this.btCancel.TabIndex = 14;
             this.btCancel.Text = "取消";
             this.btCancel.UseVisualStyleBackColor = true;
-            this.btCancel.Click += new System.EventHandler(this.btCancel_Click);
             // 
             // btExport
             // 
             this.btExport.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btExport.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.btExport.Location = new System.Drawing.Point(25, 71);
             this.btExport.Name = "btExport";
             this.btExport.Size = new System.Drawing.Size(98, 28);
@@ -74,8 +76,10 @@
             // 
             // TagFrom
             // 
+            this.AcceptButton = this.btExport;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.CancelButton = this.btCancel;
             this.ClientSize = new System.Drawing.Size(296, 110);
             this.Controls.Add(this.btCancel);
             this.Controls.Add(this.btExport);

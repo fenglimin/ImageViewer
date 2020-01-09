@@ -75,6 +75,7 @@
             // btExport
             // 
             this.btExport.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btExport.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.btExport.Location = new System.Drawing.Point(88, 86);
             this.btExport.Name = "btExport";
             this.btExport.Size = new System.Drawing.Size(98, 28);
@@ -86,18 +87,20 @@
             // btCancel
             // 
             this.btCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btCancel.Location = new System.Drawing.Point(237, 86);
             this.btCancel.Name = "btCancel";
             this.btCancel.Size = new System.Drawing.Size(98, 28);
             this.btCancel.TabIndex = 12;
             this.btCancel.Text = "取消";
             this.btCancel.UseVisualStyleBackColor = true;
-            this.btCancel.Click += new System.EventHandler(this.btCancel_Click);
             // 
             // ExportForm
             // 
+            this.AcceptButton = this.btExport;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.CancelButton = this.btCancel;
             this.ClientSize = new System.Drawing.Size(424, 126);
             this.Controls.Add(this.btCancel);
             this.Controls.Add(this.btExport);

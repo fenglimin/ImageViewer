@@ -162,7 +162,6 @@ namespace ImageViewer
                 _pictureList[index].MouseWheel += new MouseEventHandler(OnMouseWheel);
                 _pictureList[index].MouseMove += new MouseEventHandler(OnMouseMove);
                 _pictureList[index].Click += new EventHandler(OnImageClicked);
-                _pictureList[index].KeyDown += new KeyEventHandler(OnKeyDown);
             }
 
             pictureBoxDetail.MouseWheel += OnMouseWheel;
@@ -866,11 +865,6 @@ namespace ImageViewer
             }
         }
 
-        private void OnKeyDown(object sender, KeyEventArgs e)
-        {
-            DoKeyDown(e);
-        }
-
         private void OnMouseMove(object sender, System.Windows.Forms.MouseEventArgs e)
         {
             var pictureBox = sender as PictureBox;
@@ -1208,8 +1202,7 @@ namespace ImageViewer
                 TagName = string.Empty
             };
 
-            tagForm.ShowDialog();
-            if (tagForm.Cancelled)
+            if (tagForm.ShowDialog() == DialogResult.Cancel)
             {
                 return;
             }
@@ -1222,12 +1215,8 @@ namespace ImageViewer
 
         private void btDeleteTag_Click(object sender, EventArgs e)
         {
-            // lbTagList.GetSelected()
-            //var tagNameList = new List<string>();
-            //foreach (var selectedItem in lbTagList.SelectedItems)
-            //{
-            //    tagNameList.Add(selectedItem.ToString());
-            //}
+            if (MessageBox.Show("确定要删除这些标签吗？", "确认", MessageBoxButtons.YesNo) == DialogResult.No)
+                return;
 
             var tagNameList = GetCheckedTagStringList();
             foreach (var tagName in tagNameList)
@@ -1250,8 +1239,7 @@ namespace ImageViewer
                 TagName = oldTagName
             };
 
-            tagForm.ShowDialog();
-            if (tagForm.Cancelled)
+            if (tagForm.ShowDialog() == DialogResult.Cancel)
             {
                 return;
             }
@@ -1471,7 +1459,7 @@ namespace ImageViewer
             DoUnselectAll();
         }
 
-        private void lbTagList_KeyDown(object sender, KeyEventArgs e)
+        private void ImageVieweForm_KeyDown(object sender, KeyEventArgs e)
         {
             DoKeyDown(e);
         }

@@ -14,8 +14,6 @@ namespace ImageViewer
     {
         public string TagName { get; set; }
 
-        public bool Cancelled { get; set; }
-
         public TagFrom()
         {
             InitializeComponent();
@@ -23,20 +21,18 @@ namespace ImageViewer
 
         private void TagFrom_Load(object sender, EventArgs e)
         {
-            Cancelled = true;
             tbTag.Text = TagName;
+            btExport.Enabled = !string.IsNullOrEmpty(tbTag.Text);
         }
 
         private void btExport_Click(object sender, EventArgs e)
         {
-            Cancelled = false;
             TagName = tbTag.Text;
-            Close();
         }
 
-        private void btCancel_Click(object sender, EventArgs e)
+        private void tbTag_TextChanged(object sender, EventArgs e)
         {
-            Close();
+            btExport.Enabled = !string.IsNullOrEmpty(tbTag.Text);
         }
     }
 }
