@@ -88,9 +88,11 @@
             // tbShortcut
             // 
             this.tbShortcut.Location = new System.Drawing.Point(164, 35);
+            this.tbShortcut.MaxLength = 1;
             this.tbShortcut.Name = "tbShortcut";
             this.tbShortcut.Size = new System.Drawing.Size(120, 20);
             this.tbShortcut.TabIndex = 2;
+            this.tbShortcut.TextChanged += new System.EventHandler(this.tbShortcut_TextChanged);
             // 
             // TagFrom
             // 

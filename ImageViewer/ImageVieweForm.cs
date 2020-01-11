@@ -173,8 +173,10 @@ namespace ImageViewer
             }
 
             pictureBoxDetail.MouseWheel += OnMouseWheel;
+            pictureBoxDetail.Click += OnImageClicked;
 
             var cmdLine = Environment.GetCommandLineArgs();
+           
             if (cmdLine.Count() == 2)
             {
                 var fileInfo = new FileInfo(cmdLine[1]);
@@ -267,6 +269,7 @@ namespace ImageViewer
             cbIncludeSubDir.Checked = LoadSetting("IncludeSubDir", "0") == "1";
             cbImageOnly.Checked = LoadSetting("ImageOnly", "1") == "1";
 
+            cbOnlyUntagged.Checked = LoadSetting("UntaggedOnly", "0") == "1";
             _exportDir = LoadSetting("ExportDir", @"C:\");
             _deleteAfterExport = LoadSetting("DeleteAfterExport", "0") == "1";
 
@@ -290,14 +293,10 @@ namespace ImageViewer
                     _tagList.Add(tag);
                 }
 
-                _tagList.Sort((tag1, tag2) => { return tag1.ShortcutKey.CompareTo(tag2.ShortcutKey); });
-
-                for (var i = 0; i < _tagList.Count - 1; i++)
-                {
-                    lbTagList.Items.Add(_tagList[i].DisplayString());
-                }
+                RefreshTagList();
             }
 
+            
             var taggedImageListString = LoadSetting("TaggedImageList", "");
             if (!string.IsNullOrEmpty(taggedImageListString))
             {
@@ -310,6 +309,16 @@ namespace ImageViewer
             }
 
             return ret;
+        }
+
+        private void RefreshTagList()
+        {
+            lbTagList.Items.Clear();
+            _tagList.Sort((tag1, tag2) => { return tag1.ShortcutKey.CompareTo(tag2.ShortcutKey); });
+            for (var i = 0; i < _tagList.Count - 1; i++)
+            {
+                lbTagList.Items.Add(_tagList[i].DisplayString());
+            }
         }
 
         private string LoadSetting(string key, string defaultValue)
@@ -818,7 +827,10 @@ namespace ImageViewer
                 return;
 
             _imageIndex -= _row * _column;
-            ShowOneScreen();
+            if (_imageIndex >= 0)
+            {
+                ShowOneScreen();
+            }
         }
 
         private List<string> SetSelectState(PictureBox pictureBox)
@@ -857,6 +869,9 @@ namespace ImageViewer
                     if (_imageIndexDetail > 0)
                         pictureBoxDetail.ImageLocation = _fileList[--_imageIndexDetail].FullName;
                 }
+
+                var tagList = SetSelectState(pictureBoxDetail);
+                SetShowStatus(tagList);
                 return;
             }
 
@@ -1181,6 +1196,7 @@ namespace ImageViewer
 
             SaveSetting("IncludeSubDir", cbIncludeSubDir.Checked ? "1" : "0");
             SaveSetting("ImageOnly", cbImageOnly.Checked ? "1" : "0");
+            SaveSetting("UntaggedOnly", cbOnlyUntagged.Checked ? "1" : "0");
 
             SaveSetting("ExportDir", _exportDir);
             SaveSetting("DeleteAfterExport", _deleteAfterExport ? "1" : "0");
@@ -1236,7 +1252,8 @@ namespace ImageViewer
             var tagForm = new TagFrom
             {
                 TagName = string.Empty,
-                TagShortcut = string.Empty
+                TagShortcut = string.Empty,
+                TagList = _tagList
             };
 
             if (tagForm.ShowDialog() == DialogResult.Cancel)
@@ -1251,6 +1268,8 @@ namespace ImageViewer
             };
             lbTagList.Items.Add(newTag.DisplayString());
             _tagList.Add(newTag);
+
+            RefreshTagList();
         }
 
         private void btDeleteTag_Click(object sender, EventArgs e)
@@ -1279,7 +1298,8 @@ namespace ImageViewer
             var tagForm = new TagFrom
             {
                 TagName = _tagList[index].Name,
-                TagShortcut = _tagList[index].ShortcutKey
+                TagShortcut = _tagList[index].ShortcutKey,
+                TagList = _tagList
             };
 
             if (tagForm.ShowDialog() == DialogResult.Cancel)
@@ -1289,7 +1309,7 @@ namespace ImageViewer
 
             _tagList[index].Name = tagForm.TagName;
             _tagList[index].ShortcutKey = tagForm.TagShortcut;
-            lbTagList.Items[GetCheckedTagIndexList()[0]] = _tagList[index].DisplayString();
+            RefreshTagList();
         }
 
         private void btQueryByTag_Click(object sender, EventArgs e)
