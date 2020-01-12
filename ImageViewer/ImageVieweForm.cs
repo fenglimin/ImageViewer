@@ -170,10 +170,12 @@ namespace ImageViewer
                 _pictureList[index].MouseWheel += new MouseEventHandler(OnMouseWheel);
                 _pictureList[index].MouseMove += new MouseEventHandler(OnMouseMove);
                 _pictureList[index].Click += new EventHandler(OnImageClicked);
+                _pictureList[index].DoubleClick += new EventHandler(OnDoubleClicked);
             }
 
             pictureBoxDetail.MouseWheel += OnMouseWheel;
             pictureBoxDetail.Click += OnImageClicked;
+            pictureBoxDetail.DoubleClick += new EventHandler(OnDoubleClicked);
 
             var cmdLine = Environment.GetCommandLineArgs();
            
@@ -219,6 +221,11 @@ namespace ImageViewer
             {
                 MessageBox.Show("当前目录与配置文件中的目录不一致，默认加载当前目录 - " + tbDir.Text, "信息", MessageBoxButtons.OK);
             }
+        }
+
+        private void OnDoubleClicked(object sender, EventArgs e)
+        {
+            
         }
 
         private void SetPictureBoxVisible(bool visible)
