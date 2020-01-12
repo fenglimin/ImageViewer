@@ -190,18 +190,19 @@ namespace ImageViewer
                 
                 var map = new ExeConfigurationFileMap { ExeConfigFilename = Path.Combine(_workingDir, "ImageViewer.xml") };
                 _config = ConfigurationManager.OpenMappedExeConfiguration(map, ConfigurationUserLevel.None);
+
+                if (!_workingDir.EndsWith("\\"))
+                {
+                    _workingDir += "\\";
+                }
             }
             else
             {
-                _workingDir = Application.StartupPath;
                 _config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
                 btBrowse.Enabled = true;
             }
 
-            if (!_workingDir.EndsWith("\\"))
-            {
-                _workingDir += "\\";
-            }
+            
 
             var ret = LoadConfig();
             _formLoading = false;
@@ -216,7 +217,7 @@ namespace ImageViewer
 
             if (!ret && !btBrowse.Enabled)
             {
-                MessageBox.Show("当前目录与配置文件中的目录不一致，默认加载配置文件中的目录 - " + tbDir.Text, "信息", MessageBoxButtons.OK);
+                MessageBox.Show("当前目录与配置文件中的目录不一致，默认加载当前目录 - " + tbDir.Text, "信息", MessageBoxButtons.OK);
             }
         }
 
@@ -231,22 +232,17 @@ namespace ImageViewer
         private bool LoadConfig()
         {
             var ret = true;
-            var dir = LoadSetting("ImageDir", _workingDir);
-            if (!Directory.Exists(dir))
-            {
-                dir = _workingDir;
-            }
-            else
-            {
-                if (dir != _workingDir)
-                {
-                    ret = false;
-                }
-            }
 
+            var dir = LoadSetting("ImageDir", _workingDir);
             if (!dir.EndsWith("\\"))
             {
                 dir += "\\";
+            }
+
+            if (!string.IsNullOrEmpty(_workingDir) && dir.ToUpper().CompareTo(_workingDir.ToUpper()) != 0)
+            {
+                dir = _workingDir;
+                ret = false;
             }
 
             tbDir.Text = dir;
